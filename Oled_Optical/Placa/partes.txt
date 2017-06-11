@@ -1,0 +1,11 @@
+Partlist exported from C:/Users/rdiaz/Desktop/Oled_Optical/Placa/placa1.sch at 12/05/2017 11:02
+
+Part    Value       Device                Package          Description                                                   PROD_ID  
+C1      100nF       C-EUC1206K            C1206K           CAPACITOR, European symbol                                             
+C2      10uF        C-EUC1206K            C1206K           CAPACITOR, European symbol                                             
+ESP8266 ESP01       ESP01                 ESP01            ESP8266 Wifi module 01                                                 
+IC1     LD117AS50TR LD117AS50TR           SOT223           Low drop fixed and adjustable positive voltage regulators 1 A          
+JP2                 PINHD-1X5             1X05             PIN HEADER                                                             
+OLED    I2C_OLED    I2C_OLED              I2C_OLED_PACKAGE                                                                        
+R1                  R-EU_R1206            R1206            RESISTOR, European symbol                                              
+U1                  RHT03_DHT-22_AM2302RA RHT03_DHT-22/RA  RHT03 / DHT-22 / AM2302                                       SEN-10167
