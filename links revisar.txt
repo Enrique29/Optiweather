@@ -1,0 +1,28 @@
+Revisar:
+https://www.youtube.com/watch?v=m2fEXhl70OY
+http://embedded-lab.com/blog/tutorial-5-setting-esp8266-web-server/
+http://arduinoamuete.blogspot.pe/2016/02/libreria-esp8266webserver-arduino-ide.html
+https://gist.github.com/igrr/3b66292cf8708770f76b
+http://www.esp8266.com/viewtopic.php?f=29&t=2153
+https://www.youtube.com/watch?v=kYmS-gf88Kk
+https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WiFi/examples
+
+
+http://davidjwatts.com/youtube/esp8266/esp-convertHTM.html#
+thingspeak.com -------------------------------------------------------------IOT
+https://www.youtube.com/watch?v=4vKxGHGYOtI---------------------------------IOT
+https://www.youtube.com/watch?v=TUYqDyHV7Ng----- recibir info desde webpage esp8266
+https://www.google.com.pe/search?q=esp8266+choose+network+via+webpage&rlz=1C1PRFI_enPE727PE727&oq=esp8266+choose+network+via+webpage&aqs=chrome..69i57.26494j0j4&sourceid=chrome&ie=UTF-8 --------------------------------webserver to wifi
+https://www.youtube.com/watch?v=GilBJy5RDlo------------------trabajo fija
+https://www.youtube.com/watch?v=4vKxGHGYOtI-----------------fetch data API
+
+http://www.esp8266.com/viewtopic.php?f=32&t=5669&start=4
+https://github.com/esp8266/Arduino/issues/2100
+
+http://www.instructables.com/id/Using-ESP8266-SPIFFS/ -> meter archivos en flash aparte del sketch
+https://electronics.stackexchange.com/
+
+https://github.com/jasoncoon/esp8266-fastled-webserver
+https://github.com/gmag11/FSBrowser
+http://vidieukhien.xyz/esp8266-spiffs-web-server-html5-websocket-control-dieu-khien-thiet-bi-qua-web-socket/
+https://diyprojects.io/esp8266-web-server-part-1-store-web-interface-spiffs-area-html-css-js/#.WTw9P5A1-Uk
