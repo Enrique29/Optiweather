@@ -836,14 +836,14 @@
                 display.println("Se ha perdido la conexión");
                 display.setCursor(0,40);
                 display.println("esperando...");
-                delay(100)
                 perdioconex++;
-                if(perdioconex >= 30){
+                if(perdioconex >= 600){
                     conectar=false;
                 }
            }
         }
       }
+
 
 
 
