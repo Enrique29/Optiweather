@@ -28,3 +28,6 @@ http://vidieukhien.xyz/esp8266-spiffs-web-server-html5-websocket-control-dieu-kh
 https://diyprojects.io/bootstrap-web-server-esp8266-use-bootswatch-themes/#.WT2GLWiGNPY ------------temas de bootstrap
 https://diyprojects.io/esp8266-web-server-part-2-interaction-code-arduino-html-interface/#.WT2F_GiGNPY ---- usar webpage offline
 https://diyprojects.io/esp8266-web-server-part-1-store-web-interface-spiffs-area-html-css-js/#.WTw9P5A1-Uk
+
+https://www.rinconingenieril.es/arduino-ethernet-y-mysql/ ------------ ARDUINO ->MySQL
+https://www.rinconingenieril.es/de-mysql-a-arduino/	----------------- MySQL -> ARDUINO
