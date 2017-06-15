@@ -36,7 +36,7 @@
 
 
         int e=0; 
-        int minuto= 600;//600; //un minuto en ticks
+        int minuto= 100;//600; //un minuto en ticks
         bool conectar=false;
         bool conectadoporweb=false;
         String mensaje1="Ha pasado un minuto";
@@ -134,12 +134,6 @@
 
         ///conexión con DB////
 
-        char server[] =" 123.456.789.159"
-        String codigo;        //Aquí se almacena la respuesta del servidor
-        String nombre;        //Aquí se almacena el nombre que recuperamos de MySQL
-        boolean fin = false;  
-        boolean pregunta = true;
-
     /// fin de variables globales
     void temperaturaHumedadNoHora() {
         display.setTextSize(1);
@@ -173,7 +167,9 @@
         display.setCursor(7, 55);
         display.setTextSize(1);
         display.print(strHoraActual);
+        subir();
         display.display();
+        delay(1 * 5* 1000);   
     }
 
     String arregla(String a) {
@@ -382,7 +378,7 @@
         display.setCursor(0, 10);
         display.println("los datos de configuracion");
         display.display(); 
-        delay(3000);
+        delay(2000);
        
 
     }
@@ -513,7 +509,7 @@
               display.setCursor(0, 50);
               display.println("identikey:"+getidentikey);
               display.display();
-              delay(2000);
+              delay(1500);
               display.clearDisplay();
 
 
@@ -743,99 +739,26 @@
     }
 
     bool httpRequest() {
-        nombre="";
-        codigo="";
-      // Comprobar si hay conexión
-      if (client.connect(server, 80)) {
-        Serial.println("nConectado");
-        // Enviar la petición HTTP
-        //Dirección del archivo php dentro del servidor
-        client.print("GET ***?identikey=");
-        //Mandamos la variable junto a la línea de GET
-        client.print(identikey_leido);
-        client.println(" HTTP/1.0");
-        //IP del servidor
-        client.println("Host: xxxxx");
-        client.println("User-Agent: xxx");
-        client.println("Connection: close");
-        client.println();
-      }
-      else {
-        // Si no conseguimos conectarnos
-        ///////////////////////////////////////////////////////pintar X
-        display.println("x");
-        client.stop();
-        return false;
-      }
-     
-      delay(500);
-      //Comprobamos si tenemos respuesta del servidor y la 
-      //almacenamos en el string ----> codigo.
-      while (client.available()) {
-        char c = client.read();
-        codigo += c;
-        //Habilitamos la comprobación del código recibido
-        fin = true;
-     
-      }
-      //Si está habilitada la comprobación del código entramos en el IF
-      if (fin)  {
-       // Serial.println(codigo);
-       //Analizamos la longitud del código recibido
-        int longitud = codigo.length();
-        //Buscamos en que posición del string se encuentra nuestra variable
-        int posicion = codigo.indexOf("identikey=");
-        //Borramos lo que haya almacenado en el string nombre
-        nombre = "";
-     
-        //Analizamos el código obtenido y almacenamos el nombre en el string nombre
-        for (int i = posicion + 10; i < longitud; i ++){
-          if (codigo[i] == ';') i = longitud;
-          else nombre += codigo[i];
-        }
-        //Deshabilitamos el análisis del código
-        fin = false;
-        //Imprimir el nombre obtenido
-        //Serial.println("Valor de la variable nombre: " + nombre);
-        //Cerrar conexión
-        //Serial.println("Desconectarn");
-        client.stop();
-        codigo="";
-        return true;  
-      }                 
+   
     }   
 
 
 
-    void subir(int t, int h){
+    void subir(){
         display.setTextSize(1);
         display.setCursor(120, 0);
-        bool identikeyverificado= httpRequest();
-    if (identikeyverificado){
-
         // Use WiFiClient class to create TCP connections
           WiFiClient client;
-          const int httpPort = 80;
-          if (client.connect(host, httpPort)) {
-          
-            client.print("GET /***/mysql.php?temperatura=");
-            client.print(t);
-            client.print("&humedad=");
-            client.print(h);
-            client.println(" HTTP/1.0");
+          if (client.connect("http://10.20.1.112/setvalues.php?deviceid=123456789&valtemp=20&valhume=68", 80)) {
+           //client.print("GET /setvalues.php?deviceid=123456789&valtemp=20&valhume=68 HTTP/1.0");
+           //client.println();
             display.println("o");  
-
           }
+          //client.connect("http://10.20.1.112:8080/setvalues.php?deviceid=123456789&valtemp=20&valhume=68", httpPort)
           else { display.println("x");}
-    }
-    else{
-       
-        display.println("x");
-       
-    }
-      display.display();
-      delay(1 * 7 * 1000);   
+        display.display();
         
+    
     }
 
     void setup() {
@@ -903,7 +826,6 @@
 
         else{
 
-
             perdioconex=0;
             strHoraActual = "  Hora : " + hora();
             display.clearDisplay();
@@ -911,12 +833,12 @@
             int tiempoping = Ping.averageTime();//respuesta en milisegundos
             display.setTextSize(1);
             display.setCursor(80,0);
+            
             if(estadoping){
             display.println(String(tiempoping));}
-            delay(500);
             temperaturaHumedadNoHora();
+            
             delay(100);
-            subir();
             testopticalnetwork();
 
 
