@@ -4,7 +4,11 @@
         #include <Adafruit_SSD1306.h>
         #include <Adafruit_Sensor.h>
         #include <ESP8266wifi.h>
-        #include <WiFiClient.h>
+        #include <Arduino.h>
+        #include <ESP8266WiFiMulti.h>
+        #include <ESP8266HTTPClient.h>
+        #define USE_SERIAL Serial
+        //#include <HttpClient.h>
         #include <ESP8266WebServer.h>
         #include <WiFiUdp.h>
         #include <SPI.h>
@@ -34,9 +38,10 @@
         #define LOGO16_GLCD_HEIGHT 16
         #define LOGO16_GLCD_WIDTH  16
 
+        ESP8266WiFiMulti WiFiMulti;
 
         int e=0; 
-        int minuto= 100;//600; //un minuto en ticks
+        int minuto= 300;//600; //un minuto en ticks
         bool conectar=false;
         bool conectadoporweb=false;
         String mensaje1="Ha pasado un minuto";
@@ -133,6 +138,7 @@
         /////////////////////  TEMPERATURA HUMEDAD    /////////////////////
 
         ///conexión con DB////
+        char serv[] = "10.20.1.112";
 
     /// fin de variables globales
     void temperaturaHumedadNoHora() {
@@ -253,6 +259,7 @@
         delay(2000);
         display.stopscroll();
         display.display();
+        
 
     }
 
@@ -747,24 +754,66 @@
     void subir(){
         display.setTextSize(1);
         display.setCursor(120, 0);
-        // Use WiFiClient class to create TCP connections
-          WiFiClient client;
-          if (client.connect("http://10.20.1.112/setvalues.php?deviceid=123456789&valtemp=20&valhume=68", 80)) {
-           //client.print("GET /setvalues.php?deviceid=123456789&valtemp=20&valhume=68 HTTP/1.0");
-           //client.println();
-            display.println("o");  
+        /*HttpClient client;
+        client.get("10.20.1.112:8080/setvalues.php?deviceid=123456789&valtemp=20&valhume=68");
+       // Use WiFiClient class to create TCP connections
+         WiFiClient client;
+
+         //client.connect("10.20.1.112:8080/setvalues.php?deviceid=123456789&valtemp=20&valhume=68", 80);
+
+          if (client.connect(serv, 80)) {
+         
+             String url = "/input/";
+
+
           }
           //client.connect("http://10.20.1.112:8080/setvalues.php?deviceid=123456789&valtemp=20&valhume=68", httpPort)
-          else { display.println("x");}
-        display.display();
-        
-    
+          else { display.println("x");}*/
+
+
+        if((WiFiMulti.run() == WL_CONNECTED)) {
+
+        HTTPClient http;
+
+        USE_SERIAL.print("[HTTP] begin...\n");
+        // configure traged server and url
+        //http.begin("https://192.168.1.12/test.html", "7a 9c f4 db 40 d3 62 5a 6e 21 bc 5c cc 66 c8 3e a1 45 59 38"); //HTTPS
+        http.begin("10.20.1.112:8080/setvalues.php?deviceid=123456789&valtemp=20&valhume=68"); //HTTP
+
+        USE_SERIAL.print("[HTTP] GET...\n");
+        // start connection and send HTTP header
+        int httpCode = http.GET();
+
+        // httpCode will be negative on error
+        if(httpCode > 0) {
+            // HTTP header has been send and Server response header has been handled
+            USE_SERIAL.printf("[HTTP] GET... code: %d\n", httpCode);
+
+            // file found at server
+            if(httpCode == HTTP_CODE_OK) {
+                String payload = http.getString();
+                USE_SERIAL.println(payload);
+            }
+        } else {
+            USE_SERIAL.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+        }
+
+        http.end();
+    }
+
+
+
+
+
+    display.display();
     }
 
     void setup() {
+        USE_SERIAL.begin(115200);
         EEPROM.begin(512); 
+        //Bridge.begin();
         SPIFFS.begin();
-        Wire.begin(0, 2);  
+        Wire.begin(0, 2); //0 , 2 en esp y nodemcu. En wemos 5,4 
         pinMode(1, INPUT); 
         display.begin();  // initialize with the I2C addr 0x3D (for the 128x64)
         display.clearDisplay();
@@ -775,13 +824,15 @@
         digitalWrite(5, HIGH);
         digitalWrite(4, LOW);
 
-    }
 
+    }
+    
     void loop() {
        
         if(!conectar){
           setupWifiServer();
           while(e<minuto){
+            
               display.clearDisplay();
               display.setTextSize(1);
               display.setCursor(0, 0);
@@ -836,7 +887,9 @@
             
             if(estadoping){
             display.println(String(tiempoping));}
-            temperaturaHumedadNoHora();
+
+            
+            temperaturaHumedadNoHora(); // Aqui se suben los datos
             
             delay(100);
             testopticalnetwork();
