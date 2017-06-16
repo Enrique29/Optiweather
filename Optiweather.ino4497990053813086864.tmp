@@ -40,7 +40,7 @@
         ESP8266WiFiMulti WiFiMulti;
 
         int e=0; 
-        int minuto= 600;//600; //un minuto en ticks
+        int minuto= 300;//600; //un minuto en ticks
         bool conectar=false;
 
         String mensaje1="Ha pasado un minuto";
@@ -576,12 +576,21 @@
     void conectarWifi(){
         startVar();
         
+        display.clearDisplay();
+        display.setTextSize(1);
+        display.setCursor(0, 0);
+        display.println("Leyendo datos");
+        display.display();
+        
+
         ssid_leido.toCharArray(ssid, ssid_leido.length() + 1);
         pass_leido.toCharArray(pass, pass_leido.length() + 1);
               
                     
         if(metodo_leido=="1") // VERIFICA QUE METODO DE CONFIGURACION ES 1-> manual DHCP -> 0
           {
+       
+     
 
            int p1,p2,p3,p4 =0;
            p1=ssidip_leido.indexOf(".");
@@ -706,7 +715,7 @@
 
               conectar=true;
               display.clearDisplay();
-              display.setTextSize(1);
+              display.setTextSize(2);
               display.setCursor(0, 0);
               display.println("conectado a: " + ssid_leido);
               display.display();
@@ -756,12 +765,7 @@
 
             http.end();
         }
-                /* display.clearDisplay();
-                display.setTextSize(2);
-                display.setCursor(0,20);
-                display.println(response);
-                display.display();
-                delay(5000);*/
+
             if(response.toInt() > 0 && response!="error")
             {
                 return true;
@@ -919,12 +923,16 @@
                 display.clearDisplay();
                 display.setTextSize(1);
                 display.setCursor(0,20);
-                display.println("IdentityKey invalido");
+                display.println("El identitykey no");
+                display.setCursor(0,30);
+                display.println("ha sido encontrado");
+                display.setCursor(0,40);
+                display.println("por favor coloque");
+                display.setCursor(0,50);
+                display.println("uno valido");
                 display.display();
                 delay(5000);
                 conectar=false;
-                ik1=false;
-                ik2=false;
                 e=0;
             }
          }

@@ -31,6 +31,6 @@ https://diyprojects.io/esp8266-web-server-part-1-store-web-interface-spiffs-area
 
 https://www.rinconingenieril.es/arduino-ethernet-y-mysql/ ------------ ARDUINO ->MySQL
 https://www.rinconingenieril.es/de-mysql-a-arduino/	----------------- MySQL -> ARDUINO
-http://bitsofgyan.com/index.php/2016/05/01/http-requests-with-esp8266/ -----------Ejemplo ESPHTTPClient
+http://bitsofgyan.com/index.php/2016/05/01/http-requests-with-esp8266/ -----------Ejemplo ESPHTTPClient		
 
 https://www.templatemonster.com/es/admin-templates-tipo-58393.html#tab-questions
