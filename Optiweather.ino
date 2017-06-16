@@ -8,7 +8,6 @@
         #include <ESP8266WiFiMulti.h>
         #include <ESP8266HTTPClient.h>
         #define USE_SERIAL Serial
-        //#include <HttpClient.h>
         #include <ESP8266WebServer.h>
         #include <WiFiUdp.h>
         #include <SPI.h>
@@ -41,7 +40,7 @@
         ESP8266WiFiMulti WiFiMulti;
 
         int e=0; 
-        int minuto= 300;//600; //un minuto en ticks
+        int minuto= 100;//600; //un minuto en ticks
         bool conectar=false;
         bool conectadoporweb=false;
         String mensaje1="Ha pasado un minuto";
@@ -754,66 +753,43 @@
     void subir(){
         display.setTextSize(1);
         display.setCursor(120, 0);
-        /*HttpClient client;
-        client.get("10.20.1.112:8080/setvalues.php?deviceid=123456789&valtemp=20&valhume=68");
-       // Use WiFiClient class to create TCP connections
-         WiFiClient client;
-
-         //client.connect("10.20.1.112:8080/setvalues.php?deviceid=123456789&valtemp=20&valhume=68", 80);
-
-          if (client.connect(serv, 80)) {
-         
-             String url = "/input/";
-
-
-          }
-          //client.connect("http://10.20.1.112:8080/setvalues.php?deviceid=123456789&valtemp=20&valhume=68", httpPort)
-          else { display.println("x");}*/
-
 
         if((WiFiMulti.run() == WL_CONNECTED)) {
-
+        
         HTTPClient http;
 
         USE_SERIAL.print("[HTTP] begin...\n");
-        // configure traged server and url
-        //http.begin("https://192.168.1.12/test.html", "7a 9c f4 db 40 d3 62 5a 6e 21 bc 5c cc 66 c8 3e a1 45 59 38"); //HTTPS
-        http.begin("10.20.1.112:8080/setvalues.php?deviceid=123456789&valtemp=20&valhume=68"); //HTTP
 
-        USE_SERIAL.print("[HTTP] GET...\n");
+        http.begin("http://10.20.1.112:8080/setvalues.php?deviceid=123456789&valtemp="+String(t)+"&valhume="+String(h)); //HTTP
+
         // start connection and send HTTP header
         int httpCode = http.GET();
 
         // httpCode will be negative on error
         if(httpCode > 0) {
             // HTTP header has been send and Server response header has been handled
-            USE_SERIAL.printf("[HTTP] GET... code: %d\n", httpCode);
-
             // file found at server
             if(httpCode == HTTP_CODE_OK) {
                 String payload = http.getString();
                 USE_SERIAL.println(payload);
+                display.println("o");
             }
         } else {
-            USE_SERIAL.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+            display.println("x");
         }
 
         http.end();
     }
 
-
-
-
-
     display.display();
     }
+
 
     void setup() {
         USE_SERIAL.begin(115200);
         EEPROM.begin(512); 
-        //Bridge.begin();
         SPIFFS.begin();
-        Wire.begin(5, 4); //0 , 2 en esp y nodemcu. En wemos 5,4 
+        Wire.begin(0, 2); //0 , 2 en esp y nodemcu. En wemos 5,4 
         pinMode(1, INPUT); 
         display.begin();  // initialize with the I2C addr 0x3D (for the 128x64)
         display.clearDisplay();

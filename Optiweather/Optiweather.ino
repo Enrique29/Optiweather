@@ -41,7 +41,7 @@
         ESP8266WiFiMulti WiFiMulti;
 
         int e=0; 
-        int minuto= 300;//600; //un minuto en ticks
+        int minuto= 100;//600; //un minuto en ticks
         bool conectar=false;
         bool conectadoporweb=false;
         String mensaje1="Ha pasado un minuto";
@@ -772,13 +772,13 @@
 
 
         if((WiFiMulti.run() == WL_CONNECTED)) {
-
+    
         HTTPClient http;
 
         USE_SERIAL.print("[HTTP] begin...\n");
         // configure traged server and url
         //http.begin("https://192.168.1.12/test.html", "7a 9c f4 db 40 d3 62 5a 6e 21 bc 5c cc 66 c8 3e a1 45 59 38"); //HTTPS
-        http.begin("10.20.1.112:8080/setvalues.php?deviceid=123456789&valtemp=20&valhume=68"); //HTTP
+        http.begin("http//:10.20.1.112:8080/setvalues.php?deviceid=123456789&valtemp=20&valhume=68"); //HTTP
 
         USE_SERIAL.print("[HTTP] GET...\n");
         // start connection and send HTTP header
@@ -811,7 +811,6 @@
     void setup() {
         USE_SERIAL.begin(115200);
         EEPROM.begin(512); 
-        //Bridge.begin();
         SPIFFS.begin();
         Wire.begin(0, 2); //0 , 2 en esp y nodemcu. En wemos 5,4 
         pinMode(1, INPUT); 
