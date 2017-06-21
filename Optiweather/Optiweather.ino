@@ -40,7 +40,7 @@
         ESP8266WiFiMulti WiFiMulti;
 
         int e=0; 
-        int minuto= 600;//600; //un minuto en ticks
+        int minuto= 200;//600; //un minuto en ticks
         bool conectar=false;
 
         String mensaje1="Ha pasado un minuto";
@@ -116,23 +116,47 @@
         #error("Height incorrect, please fix Adafruit_SSD1306.h!");
         #endif
 
-        /////////////////////  TEMPERATURA HUMEDAD    /////////////////////
+        /////////////////////  UPTIME   /////////////////////
 
-        ///conexión con DB////
-        char serv[] = "10.20.1.112";
+        int incomingByte =0;
+        long currentmillis=0;
+        
 
-    /// fin de variables globales
+        // Imagenes para OLED
+
+        #define partly_cloudy_day_width 50
+        #define partly_cloudy_day_height 50
+        /*const unsigned char PROGMEM antenaSinSenal[] = {
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F, 0xBF, 0xDF, 0xEF, 0xF7, 0xF7, 0x77, 0xF7,
+        0xF7, 0xF7, 0xEF, 0xCF, 0xBF, 0x7F, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xF8, 0xF7, 0xEF, 0xDF, 0xBF, 0xBE, 0xBC, 0xBE,
+        0xBF, 0xBF, 0xDF, 0xEF, 0xF7, 0xF8, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F
+        };*/
+
+        struct antenaSinSenal{
+            int x = 1;
+            int y = 25;
+            int w= 32;
+            int h= 20;
+            unsigned char PROGMEM data[] = {
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F, 0xBF, 0xDF, 0xEF, 0xF7, 0xF7, 0x77, 0xF7,
+        0xF7, 0xF7, 0xEF, 0xCF, 0xBF, 0x7F, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xF8, 0xF7, 0xEF, 0xDF, 0xBF, 0xBE, 0xBC, 0xBE,
+        0xBF, 0xBF, 0xDF, 0xEF, 0xF7, 0xF8, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F
+        };
+
+        }
+
+            /// fin de variables globales
     void temperaturaHumedadNoHora() {
         display.setTextSize(1);
-        display.setCursor(0, 0);
-        display.println("OPTIWEATHER");
+        display.setCursor(105, 0);
+        display.println(String(WiFi.RSSI()) );
+
         // Reading temperature or humidity takes about 250 milliseconds!
         // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-        dht.begin();
-        delay(2000);
-         h = dht.readHumidity();
-         t = dht.readTemperature();
-
         if (isnan(t)|| t> 100) {
           t = 0;
         }
@@ -140,21 +164,22 @@
           h = 0;
         }
 
-        display.setTextSize(3);
-        display.setCursor(20, 17);
-
+        display.setTextSize(2);
+        display.setCursor(78, 15);
         display.print(t);
         display.setTextSize(1);
         display.print("c");
         display.print(" ");
-        display.setTextSize(3);
+        display.setTextSize(2);
+        display.setCursor(78, 35);
         display.print(h);
         display.setTextSize(1);
         display.println("%");
-        display.setCursor(7, 55);
+        display.setCursor(40, 55);
         display.setTextSize(1);
-        display.print(strHoraActual);
-        subir();
+        display.print(hora());
+        display.setCursor(0, 0);
+        uptime();
         display.display();
         delay(1 * 5* 1000);   
     }
@@ -187,26 +212,58 @@
     }
 
     void testopticalnetwork() {
+         
         display.setTextSize(2);
         display.setTextColor(WHITE);
-        display.setCursor(22, 16);
+        display.setCursor(43, 0);
         display.clearDisplay();
-        display.println("OPTICAL");
-        display.setCursor(19, 28);
-        display.println("networks");
+        display.println("OPTI");
+        display.setCursor(25,15);
+        display.println("WEATHER");
         display.setTextSize(1);
-        display.setCursor(0,45);
-        display.println("red:" + String(WiFi.SSID()));
-        display.setCursor(0,55);
-        display.println("Ip:" + String(WiFi.localIP()));
+        display.setCursor(20,40);
+        display.println("Optical Networks");
+        display.setCursor(37,50);
+        display.println("2017-V1.0");
         display.display();
-        delay(100);
+       dht.begin();
+        delay(2000);
+        h = dht.readHumidity();
+        t = dht.readTemperature();
+        delay(1000);
         display.clearDisplay();
     }
 
+    void pantallaConexion (){
 
-      /////////////////////  OPTICAL SCROLL    /////////////////////
+        //Pantalla de datos de Conexión
+            
+            
+            display.clearDisplay();
+            
+            bool estadoping = Ping.ping("www.google.com");
+            int tiempoping = Ping.averageTime();//respuesta en milisegundos
+            display.setTextSize(1);
+            display.setCursor(60,20);
+            //display.println("Google Ping");
+            display.setTextSize(2);
+            display.setCursor(80,30);
 
+            //if(estadoping){
+           // display.println(String(tiempoping));}
+            display.setTextSize(1);
+            display.setCursor(0,0);
+            display.println("SSID:" + String(WiFi.SSID()));
+            display.setCursor(0,55);
+            display.println("IP:" + String(WiFi.localIP()));
+            subir();
+            display.drawBitmap(antenaSinSenal.x, antenaSinSenal.y,  antenaSinSenal.data, antenaSinSenal.w, antenaSinSenal.h, 1);
+            display.display();
+
+
+      
+    }
+    /////////////////////  OPTICAL SCROLL    /////////////////////
     void testscrollopticalnetwork(void) {
         display.setTextSize(2);
         display.setTextColor(WHITE);
@@ -259,7 +316,7 @@
         int cb = udp.parsePacket();
 
           if (!cb) {
-            return "-no packet yet-";
+            return " ";
           }
           else {
               // We've received a packet, read the data from it
@@ -315,6 +372,31 @@
         udp.write(packetBuffer, NTP_PACKET_SIZE);
         udp.endPacket();
     }
+        //////// UPTIME ////
+
+    void uptime() {
+    
+           currentmillis=millis(); // get the  current milliseconds from arduino
+           // report milliseconds
+           Serial.print("Total milliseconds running: "); 
+           Serial.println(currentmillis);
+            long days=0;
+             long hours=0;
+             long mins=0;
+             long secs=0;
+             secs = currentmillis/1000; //convect milliseconds to seconds
+             mins=secs/60; //convert seconds to minutes
+             hours=mins/60; //convert minutes to hours
+             days=hours/24; //convert hours to days
+             secs=secs-(mins*60); //subtract the coverted seconds to minutes in order to display 59 secs max 
+             mins=mins-(hours*60); //subtract the coverted minutes to hours in order to display 59 minutes max
+             hours=hours-(days*24); //subtract the coverted hours to days in order to display 23 hours max
+             
+            display.println(String(days)+"d:"+String(hours)+"h:"+String(mins)+"m:"+String(secs)+"s");
+            display.display();
+      
+    }
+
 
       ///graba en EEPROM //////
 
@@ -645,11 +727,11 @@
           display.clearDisplay();
 
           display.setTextSize(1);
-          display.setCursor(0, 30);
+          display.setCursor(0, 20);
           display.println("usando metodo Manual"  );
-          display.setCursor(0, 40);
+          display.setCursor(0, 30);
           display.println("SSID:"+ ssid_leido );
-          display.setCursor(0, 50);
+          display.setCursor(0, 40);
           display.println("Password"+ pass_leido );
           display.display();
           delay(1500);
@@ -664,11 +746,11 @@
 
           int cuenta = 0;
            display.setTextSize(1);
-            display.setCursor(0, 30);
+            display.setCursor(0, 20);
             display.println("usando metodo DHCP"  );
-            display.setCursor(0, 40);
+            display.setCursor(0, 30);
             display.println("SSID:"+ ssid_leido );
-            display.setCursor(0, 50);
+            display.setCursor(0, 40);
             display.println("Password:"+ pass_leido );
             display.display();
 
@@ -824,6 +906,18 @@
         digitalWrite(4, LOW);
 
 
+        //probando cosas con el display
+
+        /*
+        while(1){
+            // statement
+            display.drawBitmap(20, 10,  partly_cloudy_day_bits, 44, 20, 1);
+        display.display();
+        delay (5000);
+        }*/
+        
+
+
     }
     
     void loop() {
@@ -882,20 +976,16 @@
             }
 
             if(ik2){
-            //cuando se conecta muestr ala info y la sube a la base de datos
+
             perdioconex=0;
-            strHoraActual = "  Hora : " + hora();
-            display.clearDisplay();
-            bool estadoping = Ping.ping("www.google.com");
-            int tiempoping = Ping.averageTime();//respuesta en milisegundos
-            display.setTextSize(1);
-            display.setCursor(80,0);
-            if(estadoping){
-            display.println(String(tiempoping));}
-            temperaturaHumedadNoHora(); // Aqui se suben los datos
-            
-            delay(100);
+            temperaturaHumedadNoHora(); // Pantalla de Datos de T y H
+            pantallaConexion();
+            delay(4000);
             testopticalnetwork();
+
+
+
+
 
 
                 //si se desconecta de pronto se desconectará
