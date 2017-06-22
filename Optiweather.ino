@@ -18,18 +18,6 @@
             #include <EEPROM.h>
             #include <String.h>
             #include <FS.h>
-    /*
-            #include <WiFiClient.h>
-            #include <TimeLib.h>
-            #include <NtpClientLib.h>
-            #include <ESPAsyncTCP.h>
-            #include <ESPAsyncWebServer.h>
-            #include <ESP8266mDNS.h>
-            #include <Ticker.h>
-            #include <ArduinoOTA.h>
-            #include <ArduinoJson.h>
-            #include "FSWebServerLib.h"
-            #include <Hash.h>*/
             #define DHTTYPE DHT11
             #define DHTPIN 1//GPIO1-Tx
             DHT dht(DHTPIN, DHTTYPE);
@@ -107,6 +95,10 @@
 
             String response = "error";
 
+            String statusconexion="";
+
+            String a="";
+
             int cuenta=0;
             int ssid_tamano=0;
             int pass_tamano=0;
@@ -119,6 +111,8 @@
             bool ik2 = false;
 
             ESP8266WebServer server(80);
+
+            String json ="[ { status: \"1\", value: \"Ok\" } { statusText: \"1\", value: \"\" } ]";
          ////////////////////PING//////////////
             bool estadoping=false;
             int tiempoping=0;
@@ -246,23 +240,21 @@
             display.clearDisplay();
         }
 
-        void pantallaConexion (){
-
-            //Pantalla de datos de Conexión
-                
-                
+        void pantallaConexion (){     
                 display.clearDisplay();
                 
                 bool estadoping = Ping.ping("www.google.com");
                 int tiempoping = Ping.averageTime();//respuesta en milisegundos
                 display.setTextSize(1);
                 display.setCursor(60,20);
-                //display.println("Google Ping");
+                display.println("Google Ping");
                 display.setTextSize(2);
                 display.setCursor(80,30);
 
-                //if(estadoping){
-               // display.println(String(tiempoping));}
+                if(estadoping){
+                display.println(String(tiempoping));}
+                else 
+                {display.println("no ping");}
                 display.setTextSize(1);
                 display.setCursor(0,0);
                 display.println("SSID:" + String(WiFi.SSID()));
@@ -270,16 +262,12 @@
                 display.println("IP:" + String(WiFi.localIP()));
                 subir();
                 //display.drawBitmap(antenaSinSenal.x, antenaSinSenal.y,  antenaSinSenal.data, antenaSinSenal.w, antenaSinSenal.h, 1);
-                display.display();
-
-
-          
+                display.display();  
         }
         /////////////////////  OPTICAL SCROLL    /////////////////////
         void testscrollopticalnetwork(void) {
             display.setTextSize(2);
             display.setTextColor(WHITE);
-            //
             display.setCursor(10, 16);
             display.clearDisplay();
             display.println("OPTICAL");
@@ -408,11 +396,7 @@
                 display.display();
           
         }
-
-
           ///graba en EEPROM //////
-
-
         void graba(int addr, String a) {
             int tamano = (a.length() + 1);
             char inchar[30];    //'30' Tamaño maximo del string
@@ -426,8 +410,6 @@
             }
             EEPROM.commit();
         }
-
-
 
           /////////////////////  L E E R   EN LA  E E P R O M    /////////////////////
 
@@ -443,16 +425,12 @@
             }
             return nuevoString;
         }
-
-
           //// Funciones de hosteo ////////////////////////////////////////////////////////////
-
-
         void root() {
-            String html2 ="<div class=\"form-horizontal\"> <fieldset> <div class=\"well bs-component\"> <div align=\"center\"><h2>Establecer red de Wifi</h2></div> <form action=\"/salvarDatos\" method=\"GET\" > <label for=\"inputEmail\" class=\"col-lg-2 control-label\">Seleccione el SSID </label> <br> <div class=\"col-lg-10\"> <select name=\"ssid\" onchange=\"javascript:document.getElementById('divssipassword').style.display=((this.value.indexOf('*')!=-1)?'':'none')\" class=\"form-control\"> <option value=\"\">--Seleccione valor</option>";
-            String html3 ="</select> </div> <div id=\"divssipassword\" style=\"display:none\"> <label class=\"col-lg-2 control-label\">Ingrese clave secreta</label> <br> <div class=\"col-lg-10\"> <input type=\"text\" class=\"form-control\" name=\"ssidpassword\" > </div> </div> <label class=\"col-lg-2 control-label\">Seleccione el metodo </label> <br> <div class=\"col-lg-10\"> <select name=\"method\" onchange=\"javascript:document.getElementById('divssidip').style.display=((this.value==1)?'':'none')\" class=\"form-control\"> <option value=\"0\">DHCP</option> <option value=\"1\">Manual</option> </select> </div> <div id=\"divssidip\" style=\"display:none\" class=\"col-lg-10\" > <label class=\"col-lg-2 control-label\">IP </label> <br> <input type=\"text\" class=\"form-control\" name=\"ssidip\" size=\"30\" > <label class=\"col-lg-2 control-label\">Gateway </label> <br> <input type=\"text\" class=\"form-control\" name=\"gateway\" > <label class=\"col-lg-2 control-label\">Mascara</label> <br> <input type=\"text\" class=\"form-control\" name=\"mascara\" value=\"255.255.255.0\"> <label class=\"col-lg-2 control-label\">DNS1</label> <br> <input type=\"text\" class=\"form-control\" name=\"dns1\"> <label class=\"col-lg-2 control-label\">DNS2</label> <br> <input type=\"text\" class=\"form-control\" name=\"dns2\"> ----------------------------------------------------------------------- </div> <label class=\"col-lg-2 control-label\">Host</label> <br> <div class=\"col-lg-10\"> <input type=\"text\" class=\"form-control\" name=\"host\"> </div> <label class=\"col-lg-2 control-label\">Ingrese identity key</label> <br> <div class=\"col-lg-10\"> <input type=\"text\" class=\"form-control\" name=\"identitykey\" > </div> <div align=\"center\" > <br> <input type=\"submit\" value=\"Enviar\" class=\"btn btn-warning\"> </div> </form> </div> </fieldset> </div> </body> </html>";
+  
+            String html ="<html> <head> <title>Redirigir al navegador a otra URL</title> <META HTTP-EQUIV=\"REFRESH\" CONTENT=\"1;URL=http://192.168.4.1/index.html\"> </head> <body>  </body> </html>";
+            server.send(200, "text/html",  html);
 
-            server.send(200, "text/html",  html1 +  html2+ scanWifi2() + html3);
             display.clearDisplay();
             display.setTextSize(1);
             display.setCursor(0, 0);
@@ -461,92 +439,43 @@
             display.println("los datos de configuracion");
             display.display(); 
             delay(2000);
-           
-
         }
           ///////////////////////////////////////////////////
-
-        void validacion () {
-            
-           ///////////////////////////////////FLAG
-            display.clearDisplay();
-            display.setCursor(0, 20);
-            display.println("Guardando datos, por favor espere");
-            display.display(); 
-            
-            if (getmethod=="0"){
-            
-
-                  display.setCursor(0, 50);
-                  display.println("se conectara por DHCP");
-                  display.display();   
-            
-            }
-            else  if (getmethod=="1")
-            {
-              
-                  display.setCursor(0, 40);
-                  display.println("se conectara");
-                  display.setCursor(0, 50);
-                  display.println("manualmente");
-                  display.display();
-                  
-                
-            
-           
-            }
-            server.send(200, "text/plain", "Conectandose, ver pantalla Oled");
-            e=minuto+1;
-            delay(1500);
-            display.clearDisplay();
-        
+        void validar (){           
+            server.send(200, "text/html", json);    
         }
 
-          //////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////
 
         void salvarDatos() {
-            
-            String html2s ="<div class=\"form-horizontal\"> <fieldset> <div class=\"well bs-component\"> <form action=\"/validacion\"> <div align=\"center\"><h2>Los datos suministados son:</h2></div> Nombre de la red:";
-            String html3s ="<br> Clave secreta:";
-            String html4s ="<br> Metodo:";
-            String html5s ="<br> Ip estatico:";
-            String html6s ="<br> Gateway:";
-            String html7s ="<br> Mascara:";
-            String html8s ="<br> DNS1:";
-            String html9s ="<br> DNS2:";
-            String html10s ="<br> ----- <br> Host:";
-            String html11s ="<br> IdentityKey:";
-            String html12s ="<br> <br> <div align=\"center\"> <input type=\"submit\" value=\"enviar\" class=\"btn btn-warning\" > </input> </div> </form> </div> </fieldset> </div> </body> </html>";
 
-         
-         
             display.clearDisplay();
-            String getssid = server.arg("ssid");
+            String getssid = server.arg("in_ssid");
             delay(90);
 
-            String getpass = server.arg("ssidpassword");
+            String getpass = server.arg("in_password");
             if (getpass != "") {
               getssid.remove(0, 1);
             }
             delay(90);
-         getmethod = server.arg("method");
+         getmethod = server.arg("in_metodo");
             delay(90);
             String met="DHCP";
                   if(getmethod=="1"){met="Manual";}
-            String getssidip = server.arg("ssidip");
+            String getssidip = server.arg("in_ip");
             delay(90);
-            String getgateway = server.arg("gateway");
+            String getgateway = server.arg("in_gateway");
             delay(90);
-            String getidentitykey = server.arg("identitykey");
+            String getidentitykey = server.arg("in_identitykey");
             delay(90);
-            String getmascara = server.arg("mascara");
+            String getmascara = server.arg("in_mask");
                 if(getmethod==0){getmascara="";}
             delay(90);
-            String getdns1 = server.arg("dns1");
+            String getdns1 = server.arg("in_dns1");
             delay(90);
-            String getdns2 = server.arg("dns2");
+            String getdns2 = server.arg("in_dns2");
             delay(90);
-            String gethost = server.arg("host");
+            String gethost = server.arg("in_urlreport");
             delay(90);
 
             
@@ -557,10 +486,7 @@
             getgateway=arregla(getgateway);
             getidentitykey = arregla(getidentitykey);
 
-      
-
-            server.send(200, "text/html",  html1 + html2s+ getssid +html3s+ getpass + html4s+ met + html5s +getssidip +html6s + getgateway + html7s+ getmascara +html8s+getdns1 +html9s + getdns2 +html10s + gethost +html11s+getidentitykey + html12s );
-            
+    
             ///////////verificar lso datos obtenidos ///////////
                   display.clearDisplay();
                   display.setTextSize(1);
@@ -579,7 +505,8 @@
                   display.setCursor(0, 10);
                   display.println("clave:"+getpass);
                   display.setCursor(0, 20);
-                  display.println("metodo:"+met);
+                  //display.println("metodo:"+met);
+                  display.println("metodo:"+getmethod);
                   display.setCursor(0, 30);
                   display.println("IP est:"+getssidip);
                   display.setCursor(0, 40);
@@ -587,7 +514,7 @@
                   display.setCursor(0, 50);
                   display.println("mascara:"+getmascara);
                   display.display();
-                  delay(2000);
+                  delay(4000);
                   display.clearDisplay();
                   display.setCursor(0, 20);
                   display.println("DNS1:"+getdns1);
@@ -622,35 +549,18 @@
             delay(10);
             graba(270,gethost);
             delay(10);
-            //}
-           // else{
-              //  String htmlerror ="<div class=\"form-horizontal\"> <div class=\"well bs-component\"> <div align=\"center\"> <h2>ERROR</h2> <label for=\"inputEmail\" class=\"col-lg-2 control-label\" >El identityKey indicado no se encuentra en el sistema, por favor colocar uno valido</label> <br> <br> <button type=\"button\" action=\"/\" class=\"btn btn-warning\" >Volver</button> </div> </div> </div> </body> </html>";
 
-               // server.send(200, "text/html", html1+htmlerror );
+            String json ="[ { status: \"1\", value: \"Ok\" } { statusText: \"1\", value: \"\" } ]";
             
-            //}
+            server.send(200, "text/html", json);
+            e=minuto+1;
+         
         }
-
-        String scanWifi2() {
-            // WiFi.scanNetworks will return the number of networks found
-            int n = WiFi.scanNetworks();
-            String a = "";
-            for (int i = 0; i < n; ++i)
-            {
-              // Print SSID and RSSI for each network found
-
-              String enctype = ((WiFi.encryptionType(i) == ENC_TYPE_NONE) ? "" : "*");
-              a += "<option value='" + enctype + String(WiFi.SSID(i)) + "'>" + String(WiFi.SSID(i)) + "</option>";
-              delay(10);
-            }
-            return a;
-        }
-
-
+     
 
         void getssids() {
             // WiFi.scanNetworks will return the number of networks found
-            int n = WiFi.scanNetworks();
+               int n = WiFi.scanNetworks();
             String a = "[";
             for (int i = 0; i < n; ++i)
             {
@@ -661,18 +571,10 @@
               delay(10);
             }
             a+="]";
-
             server.send(200, "text/json",  a);
             
         }
-
-
-
-
-
           ////////////Restaura variables guardada en EEPROM//////////////////
-
-
         void startVar() { 
 
             ssid_leido = lee(1);      
@@ -689,14 +591,18 @@
 
         }
 
-
-        void conectarWifi(){
+        boolean conectarWifi(){
             startVar();
+            int cuenta = 0;
             
+            //ssid_leido="EMR";
             ssid_leido.toCharArray(ssid, ssid_leido.length() + 1);
             pass_leido.toCharArray(pass, pass_leido.length() + 1);
-                  
-                        
+
+            display.clearDisplay();
+            display.setTextSize(1);
+            display.setCursor(0, 20);  
+
             if(metodo_leido=="1") // VERIFICA QUE METODO DE CONFIGURACION ES 1-> manual DHCP -> 0
               {
 
@@ -758,44 +664,27 @@
               IPAddress ip_subnet(m1,m2,m3,m4);
               IPAddress ip_dns1 ( dns11,dns12,dns13,dns14);
               IPAddress ip_dns2 ( dns21,dns22,dns23,dns24);
-
-              display.clearDisplay();
-
-              display.setTextSize(1);
-              display.setCursor(0, 20);
               display.println("usando metodo Manual"  );
-              display.setCursor(0, 30);
-              display.println("SSID:"+ ssid_leido );
-              display.setCursor(0, 40);
-              display.println("Password"+ pass_leido );
-              display.display();
-              delay(1500);
-              display.clearDisplay();
-              
               //WiFi.config(ip_static, ip_gateway, ip_subnet); 
                WiFi.config(ip_static, ip_gateway, ip_subnet,ip_dns1,ip_dns2); 
                   //Intentamos conectar    
+              }else{
+               if(metodo_leido=="0"){
+                  display.println("usando metodo DHCP"  );
+                   //Intentamos conectar
+                }
               }
-              
-              else if(metodo_leido=="0"){
 
-              int cuenta = 0;
-               display.setTextSize(1);
-                display.setCursor(0, 20);
-                display.println("usando metodo DHCP"  );
                 display.setCursor(0, 30);
                 display.println("SSID:"+ ssid_leido );
                 display.setCursor(0, 40);
                 display.println("Password:"+ pass_leido );
                 display.display();
 
-                   //Intentamos conectar
-
-              }
-           
-
               WiFi.begin(ssid, pass); 
+
               delay(2000);
+
               cuenta=0;
 
               while (WiFi.status() != WL_CONNECTED) {
@@ -805,17 +694,16 @@
                 display.clearDisplay();
                 display.println("intentando, veces:" + String(cuenta));
                 display.display();
-                if (cuenta > 30) {
-                  
+                if (cuenta > 30) { 
                   display.setTextSize(1);
                   display.setCursor(0, 40);
                   display.println("Fallo al conectar");
                   display.display();
-                  delay(2000);
+                  delay(200);
                   display.clearDisplay();
                   e=0;
                   conectar=false;
-                  return;        
+                  return false;        
                 }        
          }
             
@@ -827,73 +715,64 @@
                   display.setCursor(0, 0);
                   display.println("conectado a: " + ssid_leido);
                   display.display();
-                  delay(1000);
-                  display.clearDisplay();
+   
                   
               }    
+
+              return true;
           }
 
-        void setupWifiServer() {
-            WiFi.mode(WIFI_AP);
-            WiFi.softAP("Optiweather");
-              
-            IPAddress myIP = WiFi.softAPIP();
-
-            //server.on("/", root);
-            server.on("/salvarDatos", salvarDatos);
-            server.on("/getssids", getssids);
-            server.on ("/validacion", validacion);
-            server.serveStatic("/", SPIFFS, "/");
-            server.serveStatic("/", SPIFFS, "/index.html");
-            /*server.serveStatic("/index.html", SPIFFS, "/index.html");
-            server.serveStatic("/", SPIFFS, "/index.html");
-            server.serveStatic("/codebase", SPIFFS, "/codebase");
-            server.serveStatic("/codebase/imgs", SPIFFS, "/codebase/imgs");*/
-            
-            server.begin();
-            conectar=false;
-            
-        }
 
         bool verificaridentitykey() {
 
-
-            if((WiFiMulti.run() == WL_CONNECTED) ) {
-                
+            if((WiFiMulti.run() == WL_CONNECTED) ) {  
                 HTTPClient http;
-
                 USE_SERIAL.print("[HTTP] begin...\n");
-
                 http.begin("http://"+ host_leido+"/valididentitykey.php?identitykey="+identitykey_leido); //HTTP
-
-                // start connection and send HTTP header
                 int httpCode = http.GET();
 
-                // httpCode will be negative on error
                 if(httpCode > 0) {
-                    // HTTP header has been send and Server response header has been handled
-                    // file found at server
                     if(httpCode == HTTP_CODE_OK) {
-                          response = http.getString();  
-                        }
+                          return http.getString();  
+                    } else {
+                        return false;
+                    }
                 } 
-
                 http.end();
             }
-                    /* display.clearDisplay();
-                    display.setTextSize(2);
-                    display.setCursor(0,20);
-                    display.println(response);
-                    display.display();
-                    delay(5000);*/
-                if(response.toInt() > 0 && response!="error")
-                {
-                    return true;
-                }
-                else{return false;}
-       
         }   
 
+        boolean verificardatos(){
+
+            if (conectarWifi()==false) {
+                server.send(200, "text/html",  "{status:'100'.statustext:'no fue posible conectarse a la WIFI'}");
+                return false;
+            }
+
+            if (Ping.ping("www.google.com")==false) {
+                server.send(200, "text/html",  "{status:'101'.statustext:'no hay conexion a internet'}");
+                return false;
+            }
+
+            if (verificaridentitykey()==false) {
+                server.send(200, "text/html",  "{status:'102'.statustext:'servidor de validación no responde'}");
+                return false;
+            }
+            if (response=="0"){
+                statusconexion="IdentityKey erronea";
+                server.send(200, "text/html",  "{status:'103'.statustext:'IdentityKey erronea'}");
+                return false;
+            }
+            if(response.indexOf("error")!=-1) {   
+                server.send(200, "text/html",  "{status:'104'.statustext:'error en el servidor web'}");
+                return false;
+            }
+            server.send(200, "text/html",  "{status:'ok'.statustext:''}");
+             return true;
+             for(int i=0; i<150; i++){
+             server.handleClient();
+             }
+        }
 
 
         void subir(){
@@ -906,7 +785,7 @@
 
                 USE_SERIAL.print("[HTTP] begin...\n");
 
-                http.begin("http://"+ host_leido+"/setvalues.php?deviceid=123456789&valtemp="+String(t)+"&valhume="+String(h)); //HTTP
+                http.begin("http://"+ host_leido+"/setvalues.php?deviceid="+String(identitykey_leido)+"&valtemp="+String(t)+"&valhume="+String(h)); //HTTP
 
                 // start connection and send HTTP header
                 int httpCode = http.GET();
@@ -931,6 +810,20 @@
         display.display();
         }
 
+        void setupWifiServer() {
+            WiFi.mode(WIFI_AP_STA);
+            WiFi.softAP("Optiweather");     
+            IPAddress myIP = WiFi.softAPIP();
+            server.on("/", root);
+            server.on("/salvarDatos", salvarDatos);
+            server.on("/validar", validar);
+            server.on("/getssids", getssids);
+             server.on("/verificardatos", verificardatos);
+            server.serveStatic("/", SPIFFS, "/");         
+            server.begin();
+
+            conectar=false;
+        }
 
         void setup() {
             USE_SERIAL.begin(115200);
@@ -940,31 +833,19 @@
             pinMode(1, INPUT); 
             display.begin();  // initialize with the I2C addr 0x3D (for the 128x64)
             display.clearDisplay();
+           // WiFi.mode(WIFI_AP_STA);
+            //WiFi.softAP("Optiweather");
             testscrollopticalnetwork();
             display.clearDisplay();
             pinMode(5, OUTPUT);
             pinMode(4, OUTPUT);
             digitalWrite(5, HIGH);
             digitalWrite(4, LOW);
-
-
-            //probando cosas con el display
-
-            /*
-            while(1){
-                // statement
-                display.drawBitmap(20, 10,  partly_cloudy_day_bits, 44, 20, 1);
-            display.display();
-            delay (5000);
-            }*/
-            
-
-
         }
         
         void loop() {
            
-            if(!conectar){
+            if(!ik2){
               setupWifiServer();
               while(e<minuto){
                 
@@ -1003,34 +884,24 @@
                   delay(1000);
                   display.clearDisplay();
                 }
-
-              WiFi.mode(WIFI_STA);
-              delay(1000);
-              conectarWifi();
+                display.clearDisplay();
+                display.setTextSize(1);
+                display.setCursor(0, 0);
+                display.println("verificando datos...");
+                ik2=verificardatos();
+              /*conectarWifi();*/
               delay(2000);
+              
             }
-
-            else{
-                
-                if(!ik1){
-                ik2=verificaridentitykey();
-                ik1=true;
-                }
-
+                   
                 if(ik2){
-
+                WiFi.mode(WIFI_AP_STA);
                 perdioconex=0;
                 temperaturaHumedadNoHora(); // Pantalla de Datos de T y H
-                pantallaConexion();
+                pantallaConexion();//pantalla de datos de conexión a internet
                 delay(4000);
-                testopticalnetwork();
-
-
-
-
-
-
-                    //si se desconecta de pronto se desconectará
+                testopticalnetwork();//pantalla de Optiweather V1.0
+                //si se desconecta de pronto voverá al inicio
                  while (WiFi.status() != WL_CONNECTED) {
 
                     display.clearDisplay();
@@ -1053,13 +924,14 @@
                     display.setCursor(0,20);
                     display.println("IdentityKey invalido");
                     display.display();
+                    WiFi.mode(WIFI_OFF); 
                     delay(5000);
                     conectar=false;
                     ik1=false;
                     ik2=false;
                     e=0;
                 }
-             }
-
         }
+
+        
         
