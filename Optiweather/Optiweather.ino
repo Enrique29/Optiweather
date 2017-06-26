@@ -1,8 +1,11 @@
         //Definiendo   
             #include <ESP8266WiFi.h>
             #include <ESP8266Ping.h>
+            #include <SPI.h>
+            #include <Wire.h>
             #include <Adafruit_SSD1306.h>
             #include <Adafruit_Sensor.h>
+            #include <Adafruit_GFX.h>
             #include <ESP8266wifi.h>
             #include <Arduino.h>
             #include <ESP8266WiFiMulti.h>
@@ -12,7 +15,6 @@
             #include <WiFiUdp.h>
             #include <SPI.h>
             #include <Wire.h>
-            #include <Adafruit_GFX.h>
             #include <DHT.h>
             #include <DHT_U.h>
             #include <EEPROM.h>
@@ -38,6 +40,7 @@
             #define LOGO16_GLCD_WIDTH  16
 
             ESP8266WiFiMulti WiFiMulti;
+      
 
             int e=0; 
             int minuto= 200;//600; //un minuto en ticks
@@ -97,7 +100,7 @@
 
             String statusconexion="";
 
-            String a="";
+            String a = "[";
 
             int cuenta=0;
             int ssid_tamano=0;
@@ -158,9 +161,14 @@
                 /// fin de variables globales
         void temperaturaHumedadNoHora() {
             display.setTextSize(1);
-            display.setCursor(105, 0);
-            display.println(String(WiFi.RSSI()) );
-
+            //display.setCursor(105, 0);
+            //display.println(String(WiFi.RSSI()) );
+            dibujoRssiMini();
+            dht.begin();
+            delay(2000);
+            h = dht.readHumidity();
+            t = dht.readTemperature();
+            delay(1000);
             // Reading temperature or humidity takes about 250 milliseconds!
             // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
             if (isnan(t)|| t> 100) {
@@ -169,7 +177,6 @@
             if (isnan(h)|| h> 100) {
               h = 0;
             }
-
             display.setTextSize(2);
             display.setCursor(78, 15);
             display.print(t);
@@ -187,34 +194,67 @@
             display.setCursor(0, 0);
             uptime();
             display.display();
-            delay(1 * 5* 1000);   
+            delay(1 * 8* 1000);   
         }
 
-        String arregla(String a) {
-            a.replace("%C3%A1", "á");
-            a.replace("%C3%A9", "é");
-            a.replace("%C3%A", "i");
-            a.replace("%C3%B3", "ó");
-            a.replace("%C3%BA", "ú");
-            a.replace("%21", "!");
-            a.replace("%23", "#");
-            a.replace("%24", "$");
-            a.replace("%25", "%");
-            a.replace("%26", "&");
-            a.replace("%27", "/");
-            a.replace("%28", "(");
-            a.replace("%29", ")");
-            a.replace("%3D", "=");
-            a.replace("%3F", "?");
-            a.replace("%27", "'");
-            a.replace("%C2%BF", "¿");
-            a.replace("%C2%A1", "¡");
-            a.replace("%C3%B1", "ñ");
-            a.replace("%C3%91", "Ñ");
-            a.replace("+", " ");
-            a.replace("%2B", "+");
-            a.replace("%22", "\"");
-            return a;
+        void dibujoRssiMini(){
+            //display.setCursor(105, 0);
+            int rssi =WiFi.RSSI();
+            display.drawFastVLine( 114,  1,  8,WHITE);
+            display.drawFastHLine(110,  1,  9,WHITE);
+            display.drawPixel(111,2,WHITE);
+            display.drawPixel(112,3,WHITE);
+            display.drawPixel(113,4,WHITE);
+            display.drawPixel(115,4,WHITE);
+            display.drawPixel(116,3,WHITE);
+            display.drawPixel(117,2,WHITE);
+
+
+            if(rssi>-80){
+            display.drawFastVLine( 116,  7,  2,WHITE);
+                
+
+            }
+            if(rssi>-70){
+            display.drawFastVLine( 118,  5,  4,WHITE);
+                
+            }
+            if(rssi>-60){
+            display.drawFastVLine( 120,  3,  6,WHITE);
+                
+            }
+            if(rssi>-50){
+            display.drawFastVLine( 122,  1,  8,WHITE);
+                
+            }
+
+        }
+
+        String arregla(String n) {
+            n.replace("%C3%A1", "á");
+            n.replace("%C3%A9", "é");
+            n.replace("%C3%A", "i");
+            n.replace("%C3%B3", "ó");
+            n.replace("%C3%BA", "ú");
+            n.replace("%21", "!");
+            n.replace("%23", "#");
+            n.replace("%24", "$");
+            n.replace("%25", "%");
+            n.replace("%26", "&");
+            n.replace("%27", "/");
+            n.replace("%28", "(");
+            n.replace("%29", ")");
+            n.replace("%3D", "=");
+            n.replace("%3F", "?");
+            n.replace("%27", "'");
+            n.replace("%C2%BF", "¿");
+            n.replace("%C2%A1", "¡");
+            n.replace("%C3%B1", "ñ");
+            n.replace("%C3%91", "Ñ");
+            n.replace("+", " ");
+            n.replace("%2B", "+");
+            n.replace("%22", "\"");
+            return n;
         }
 
         void testopticalnetwork() {
@@ -232,16 +272,57 @@
             display.setCursor(37,50);
             display.println("2017-V1.0");
             display.display();
-           dht.begin();
-            delay(2000);
-            h = dht.readHumidity();
-            t = dht.readTemperature();
-            delay(1000);
             display.clearDisplay();
+
         }
 
-        void pantallaConexion (){     
+        void pantallaConexion (){   
                 display.clearDisplay();
+                int rssi =WiFi.RSSI();
+                display.drawFastVLine( 11,  25,  20,WHITE);
+                display.drawFastVLine( 12,  26,  20,WHITE);
+                display.drawFastHLine(2,  25,  19,WHITE);
+                display.drawFastHLine(2,  26,  19,WHITE);
+                int c=26;
+                for(int i=3; i<11;i++){
+
+                    display.drawPixel(i,c,WHITE);
+                    display.drawPixel(i+1,c,WHITE);
+                    /*i++;
+                    display.drawPixel(i,c,WHITE);*/
+                    c++;
+                }
+                c=26;
+                for(int i=20; i>12;i--){
+
+                    display.drawPixel(i,c,WHITE);
+                    display.drawPixel(i-1,c,WHITE);
+                    /*i--;
+                    display.drawPixel(i,c,WHITE);*/
+                    c++;
+                }
+                    if(rssi>-80){
+                    display.drawFastVLine( 18,40,  5,  WHITE);
+                    display.drawFastVLine( 19,40,  5,  WHITE);   
+                    
+                    }
+                    if(rssi>-70){
+                    display.drawFastVLine( 22,35,  10,  WHITE);
+                    display.drawFastVLine( 23,35,  10,  WHITE); 
+                      
+                    }
+                    if(rssi>-60){
+                    display.drawFastVLine( 26,30,  15,  WHITE);
+                    display.drawFastVLine( 27,30,  15,  WHITE);  
+                      
+                    }
+                    if(rssi>-50){
+                    display.drawFastVLine( 30,25,  20,  WHITE);
+                    display.drawFastVLine( 31,25,  20,  WHITE); 
+                      
+                    }
+
+                
                 
                 bool estadoping = Ping.ping("www.google.com");
                 int tiempoping = Ping.averageTime();//respuesta en milisegundos
@@ -397,10 +478,10 @@
           
         }
           ///graba en EEPROM //////
-        void graba(int addr, String a) {
-            int tamano = (a.length() + 1);
+        void graba(int addr, String c) {
+            int tamano = (c.length() + 1);
             char inchar[30];    //'30' Tamaño maximo del string
-            a.toCharArray(inchar, tamano);
+            c.toCharArray(inchar, tamano);
             EEPROM.write(addr, tamano);
             delay(180);
             for (int i = 0; i < tamano; i++) {
@@ -505,8 +586,8 @@
                   display.setCursor(0, 10);
                   display.println("clave:"+getpass);
                   display.setCursor(0, 20);
-                  //display.println("metodo:"+met);
-                  display.println("metodo:"+getmethod);
+                  display.println("metodo:"+met);
+                  //display.println("metodo:"+getmethod);
                   display.setCursor(0, 30);
                   display.println("IP est:"+getssidip);
                   display.setCursor(0, 40);
@@ -556,12 +637,26 @@
             e=minuto+1;
          
         }
-     
+        void escanearssids() {
+               /* int n = WiFi.scanNetworks();
+            
+            for (int i = 0; i < n; ++i)
+            {
+              // Print SSID and RSSI for each network found
+
+              String enctype = ((WiFi.encryptionType(i) == ENC_TYPE_NONE) ? "" : "*");
+              a += "{ id: '" + enctype + String(WiFi.SSID(i)) + "', value: '" + String(WiFi.SSID(i)) + "'},";
+              delay(10);
+            }
+            a+="]";*/
+
+        }
+
 
         void getssids() {
             // WiFi.scanNetworks will return the number of networks found
                int n = WiFi.scanNetworks();
-            String a = "[";
+            
             for (int i = 0; i < n; ++i)
             {
               // Print SSID and RSSI for each network found
@@ -733,7 +828,8 @@
 
                 if(httpCode > 0) {
                     if(httpCode == HTTP_CODE_OK) {
-                          return http.getString();  
+                        response= http.getString();
+                          return response;  
                     } else {
                         return false;
                     }
@@ -746,32 +842,81 @@
 
             if (conectarWifi()==false) {
                 server.send(200, "text/html",  "{status:'100'.statustext:'no fue posible conectarse a la WIFI'}");
+                display.clearDisplay();
+                  display.setTextSize(1);
+                  display.setCursor(0, 0);
+                  display.println("Error conexión");
+                  display.display();
+                  delay(2000);
+                  display.clearDisplay();
                 return false;
+
             }
 
             if (Ping.ping("www.google.com")==false) {
                 server.send(200, "text/html",  "{status:'101'.statustext:'no hay conexion a internet'}");
+                display.clearDisplay();
+                  display.setTextSize(1);
+                  display.setCursor(0, 0);
+                  display.println("Error internet");
+                  display.setCursor(0, 20);
+                  display.display();
+                  delay(2000);
+                  display.clearDisplay();
                 return false;
             }
 
             if (verificaridentitykey()==false) {
                 server.send(200, "text/html",  "{status:'102'.statustext:'servidor de validación no responde'}");
+                display.clearDisplay();
+                  display.setTextSize(1);
+                  display.setCursor(0, 0);
+                  display.println("Error servidor");
+                  display.setCursor(0, 20);
+                  display.display();
+                  delay(2000);
+                  display.clearDisplay();
                 return false;
             }
             if (response=="0"){
                 statusconexion="IdentityKey erronea";
                 server.send(200, "text/html",  "{status:'103'.statustext:'IdentityKey erronea'}");
+               display.clearDisplay();
+                  display.setTextSize(1);
+                  display.setCursor(0, 0);
+                  display.println("Error identitykey");
+                  display.setCursor(0, 20);
+                  display.display();
+                  delay(2000);
+                  display.clearDisplay();
                 return false;
             }
-            if(response.indexOf("error")!=-1) {   
+            if(response=="error") {   
                 server.send(200, "text/html",  "{status:'104'.statustext:'error en el servidor web'}");
+                display.clearDisplay();
+                  display.setTextSize(1);
+                  display.setCursor(0, 0);
+                  display.println("Error servidorweb");
+                  display.setCursor(0, 20);
+                  display.display();
+                  delay(2000);
+                  display.clearDisplay();
                 return false;
             }
             server.send(200, "text/html",  "{status:'ok'.statustext:''}");
+                  display.clearDisplay();
+                  display.setTextSize(1);
+                  display.setCursor(0, 0);
+                  display.println("Todo ok");
+                  display.setCursor(0, 20);
+                  display.display();
+                  delay(2000);
+                  display.clearDisplay();
+                  for(int i=0; i<150; i++){
+             server.handleClient();}
              return true;
-             for(int i=0; i<150; i++){
-             server.handleClient();
-             }
+             
+             
         }
 
 
@@ -811,6 +956,8 @@
         }
 
         void setupWifiServer() {
+            WiFi.mode(WIFI_OFF); 
+            delay(500);
             WiFi.mode(WIFI_AP_STA);
             WiFi.softAP("Optiweather");     
             IPAddress myIP = WiFi.softAPIP();
@@ -821,8 +968,10 @@
              server.on("/verificardatos", verificardatos);
             server.serveStatic("/", SPIFFS, "/");         
             server.begin();
-
+            delay(500);
+            void escanearssids();
             conectar=false;
+
         }
 
         void setup() {
@@ -907,7 +1056,7 @@
                     display.clearDisplay();
                     display.setTextSize(1);
                     display.setCursor(0,30);
-                    display.println("Se ha perdido la conexión");
+                    display.println("Se ha perdido la conexión");  
                     display.setCursor(0,40);
                     display.println("esperando...");
                     perdioconex++;
@@ -919,11 +1068,11 @@
                  }
                 }
                 else{
-                    display.clearDisplay();
+                    /*display.clearDisplay();
                     display.setTextSize(1);
                     display.setCursor(0,20);
                     display.println("IdentityKey invalido");
-                    display.display();
+                    display.display();*/
                     WiFi.mode(WIFI_OFF); 
                     delay(5000);
                     conectar=false;
