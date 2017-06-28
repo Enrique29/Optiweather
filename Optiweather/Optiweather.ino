@@ -43,7 +43,7 @@
       
 
             int e=0; 
-            int minuto= 200;//600; //un minuto en ticks
+            int minuto= 100;//600; //un minuto en ticks
             bool conectar=false;
 
             String mensaje1="Ha pasado un minuto";
@@ -135,37 +135,56 @@
 
             #define partly_cloudy_day_width 50
             #define partly_cloudy_day_height 50
-            /*const unsigned char PROGMEM antenaSinSenal[] = {
-            0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F, 0xBF, 0xDF, 0xEF, 0xF7, 0xF7, 0x77, 0xF7,
-            0xF7, 0xF7, 0xEF, 0xCF, 0xBF, 0x7F, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-            0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xF8, 0xF7, 0xEF, 0xDF, 0xBF, 0xBE, 0xBC, 0xBE,
-            0xBF, 0xBF, 0xDF, 0xEF, 0xF7, 0xF8, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-            0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F
-            };*/
 
-          /*  class antenaSinSenal{
-                int x = 1;
-                int y = 25;
-                int w= 32;
-                int h= 20;
-                unsigned char PROGMEM data[100] = {
-                0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7F, 0xBF, 0xDF, 0xEF, 0xF7, 0xF7, 0x77, 0xF7,
-                0xF7, 0xF7, 0xEF, 0xCF, 0xBF, 0x7F, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xF8, 0xF7, 0xEF, 0xDF, 0xBF, 0xBE, 0xBC, 0xBE,
-                0xBF, 0xBF, 0xDF, 0xEF, 0xF7, 0xF8, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
-                0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F, 0x0F
-                };
 
-            }*/
+       const unsigned char termometro [] = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0xE0, 0x00, 0x00, 0x0C, 0x70, 0x00, 0x00, 0x08, 0x30, 0x00,
+        0x00, 0x18, 0x1F, 0x00, 0x00, 0x18, 0x1F, 0x00, 0x00, 0x18, 0x10, 0x00, 0x00, 0x18, 0x10, 0x00,
+        0x00, 0x19, 0xF0, 0x00, 0x00, 0x19, 0x10, 0x00, 0x00, 0x19, 0x0F, 0x00, 0x00, 0x19, 0x0F, 0x00,
+        0x00, 0x19, 0x10, 0x00, 0x00, 0x19, 0x10, 0x00, 0x00, 0x19, 0x10, 0x00, 0x00, 0x19, 0x10, 0x00,
+        0x00, 0x19, 0x10, 0x00, 0x00, 0x19, 0x08, 0x00, 0x00, 0x31, 0x04, 0x00, 0x00, 0x62, 0x02, 0x00,
+        0x00, 0xC4, 0x02, 0x00, 0x00, 0x88, 0x01, 0x00, 0x00, 0x98, 0x01, 0x00, 0x00, 0x90, 0x01, 0x00,
+        0x00, 0xE0, 0x01, 0x00, 0x00, 0x80, 0x01, 0x00, 0x00, 0x80, 0x02, 0x00, 0x00, 0x40, 0x02, 0x00,
+        0x00, 0x20, 0x04, 0x00, 0x00, 0x10, 0x18, 0x00, 0x00, 0x0F, 0xE0, 0x00, 0x00, 0x00, 0x00, 0x00
+        };
 
+        const unsigned char gota [] = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x80, 0x00, 0x00, 0x03, 0xC0, 0x00, 0x00, 0x07, 0xE0, 0x00,
+        0x00, 0x07, 0xE0, 0x00, 0x00, 0x0F, 0xF0, 0x00, 0x00, 0x1F, 0xF8, 0x00, 0x00, 0x1F, 0xF8, 0x00,
+        0x00, 0x3F, 0xFC, 0x00, 0x00, 0x7F, 0xFE, 0x00, 0x00, 0x7F, 0xFE, 0x00, 0x00, 0xFF, 0xFF, 0x00,
+        0x00, 0xFF, 0xFF, 0x00, 0x01, 0xFF, 0xFF, 0x80, 0x01, 0xFF, 0xFF, 0x80, 0x03, 0xFF, 0xFF, 0xC0,
+        0x03, 0xFF, 0xFF, 0xC0, 0x03, 0x3F, 0xFF, 0xC0, 0x07, 0x3F, 0xFF, 0xE0, 0x07, 0x3F, 0xFF, 0xE0,
+        0x06, 0x3F, 0xFF, 0xE0, 0x06, 0x3F, 0xFF, 0xE0, 0x07, 0x1F, 0xFF, 0xE0, 0x03, 0x0F, 0xFF, 0xC0,
+        0x03, 0x07, 0xFF, 0xC0, 0x03, 0x83, 0xFF, 0xC0, 0x01, 0xC0, 0x7F, 0x80, 0x00, 0xF0, 0x3F, 0x00,
+        0x00, 0xFE, 0xFF, 0x00, 0x00, 0x3F, 0xFC, 0x00, 0x00, 0x1F, 0xF8, 0x00, 0x00, 0x00, 0x00, 0x00
+        };
+
+        struct dibujo1 {
+
+            int x= 2 ;
+            int y= 15;
+            int w= 32;//44
+            int h= 32;
+
+        };
+
+        struct dibujo2 {
+
+            int x=65 ;  
+            int y=15;
+            int w=32;
+            int h=32;
+        };
+
+        
                 /// fin de variables globales
         void temperaturaHumedadNoHora() {
+            dibujo1 termo;
+            dibujo2 got;
             display.setTextSize(1);
-            //display.setCursor(105, 0);
-            //display.println(String(WiFi.RSSI()) );
             dibujoRssiMini();
             dht.begin();
-            delay(2000);
+            delay(3000);
             h = dht.readHumidity();
             t = dht.readTemperature();
             delay(1000);
@@ -178,21 +197,26 @@
               h = 0;
             }
             display.setTextSize(2);
-            display.setCursor(78, 15);
+            display.setCursor(33, 22);
             display.print(t);
+            //    display.print(27);
             display.setTextSize(1);
             display.print("c");
             display.print(" ");
             display.setTextSize(2);
-            display.setCursor(78, 35);
+            display.setCursor(96, 22);
             display.print(h);
+            //    display.print(60);
             display.setTextSize(1);
             display.println("%");
-            display.setCursor(40, 55);
-            display.setTextSize(1);
+            display.setCursor(0, 55);
             display.print(hora());
-            display.setCursor(0, 0);
+            display.drawFastHLine(0,  52,  128,WHITE);
+            display.setCursor(0, 1);
             uptime();
+            display.drawBitmap(termo.x, termo.y,  termometro, termo.w, termo.h, WHITE);
+            display.drawBitmap(got.x, got.y,  gota, got.w, got.h, WHITE);
+            
             display.display();
             delay(1 * 8* 1000);   
         }
@@ -230,6 +254,52 @@
 
         }
 
+        void dibujoRssi(){
+            int rssi =WiFi.RSSI();
+                display.drawFastVLine( 16,  25,  20,WHITE);
+                display.drawFastVLine( 17,  26,  20,WHITE);
+                display.drawFastHLine(8,  25,  18,WHITE);
+                display.drawFastHLine(8,  26,  18,WHITE);
+                int c=26;
+                for(int i=8; i<16;i++){
+
+                    display.drawPixel(i,c,WHITE);
+                    display.drawPixel(i+1,c,WHITE);
+                  
+                    c++;
+                }
+                c=26;
+                for(int i=25; i>17;i--){
+
+                    display.drawPixel(i,c,WHITE);
+                    display.drawPixel(i-1,c,WHITE);
+                    
+                    c++;
+                }
+                    if(rssi>-80){
+                    display.drawFastVLine( 23,40,  5,  WHITE);
+                    display.drawFastVLine( 24,40,  5,  WHITE);   
+                    
+                    }
+                    if(rssi>-70){
+                    display.drawFastVLine( 27,35,  10,  WHITE);
+                    display.drawFastVLine( 28,35,  10,  WHITE); 
+                      
+                    }
+                    if(rssi>-60){
+                    display.drawFastVLine( 31,30,  15,  WHITE);
+                    display.drawFastVLine( 32,30,  15,  WHITE);  
+                      
+                    }
+                    if(rssi>-50){
+                    display.drawFastVLine( 35,25,  20,  WHITE);
+                    display.drawFastVLine( 36,25,  20,  WHITE); 
+                      
+                    }
+
+
+        }
+
         String arregla(String n) {
             n.replace("%C3%A1", "á");
             n.replace("%C3%A9", "é");
@@ -261,10 +331,10 @@
              
             display.setTextSize(2);
             display.setTextColor(WHITE);
-            display.setCursor(43, 0);
+            display.setCursor(43,10);
             display.clearDisplay();
             display.println("OPTI");
-            display.setCursor(25,15);
+            display.setCursor(25,25);
             display.println("WEATHER");
             display.setTextSize(1);
             display.setCursor(20,40);
@@ -278,180 +348,143 @@
 
         void pantallaConexion (){   
                 display.clearDisplay();
-                int rssi =WiFi.RSSI();
-                display.drawFastVLine( 11,  25,  20,WHITE);
-                display.drawFastVLine( 12,  26,  20,WHITE);
-                display.drawFastHLine(2,  25,  19,WHITE);
-                display.drawFastHLine(2,  26,  19,WHITE);
-                int c=26;
-                for(int i=3; i<11;i++){
-
-                    display.drawPixel(i,c,WHITE);
-                    display.drawPixel(i+1,c,WHITE);
-                    /*i++;
-                    display.drawPixel(i,c,WHITE);*/
-                    c++;
-                }
-                c=26;
-                for(int i=20; i>12;i--){
-
-                    display.drawPixel(i,c,WHITE);
-                    display.drawPixel(i-1,c,WHITE);
-                    /*i--;
-                    display.drawPixel(i,c,WHITE);*/
-                    c++;
-                }
-                    if(rssi>-80){
-                    display.drawFastVLine( 18,40,  5,  WHITE);
-                    display.drawFastVLine( 19,40,  5,  WHITE);   
-                    
-                    }
-                    if(rssi>-70){
-                    display.drawFastVLine( 22,35,  10,  WHITE);
-                    display.drawFastVLine( 23,35,  10,  WHITE); 
-                      
-                    }
-                    if(rssi>-60){
-                    display.drawFastVLine( 26,30,  15,  WHITE);
-                    display.drawFastVLine( 27,30,  15,  WHITE);  
-                      
-                    }
-                    if(rssi>-50){
-                    display.drawFastVLine( 30,25,  20,  WHITE);
-                    display.drawFastVLine( 31,25,  20,  WHITE); 
-                      
-                    }
-
+                dibujoRssi();
+                
                 
                 
                 bool estadoping = Ping.ping("www.google.com");
                 int tiempoping = Ping.averageTime();//respuesta en milisegundos
                 display.setTextSize(1);
-                display.setCursor(60,20);
+                display.setCursor(60,17);
                 display.println("Google Ping");
-                display.setTextSize(2);
-                display.setCursor(80,30);
 
                 if(estadoping){
-                display.println(String(tiempoping));}
+                display.setTextSize(2);
+                display.setCursor(65,30);
+                display.println(String(tiempoping));
+                display.setCursor(105,35);
+                display.setTextSize(1);
+                display.println("ms");
+                
+                }
+
                 else 
                 {display.println("no ping");}
                 display.setTextSize(1);
                 display.setCursor(0,0);
-                display.println("SSID:" + String(WiFi.SSID()));
+                String ssidcorto = String(WiFi.SSID());
+                if(ssidcorto.length()>16){
+                    ssidcorto= ssidcorto.substring(0,16);
+                }
+                display.println("SSID:" + ssidcorto);
                 display.setCursor(0,55);
                 display.println("IP:" + String(WiFi.localIP()));
                 subir();
-                //display.drawBitmap(antenaSinSenal.x, antenaSinSenal.y,  antenaSinSenal.data, antenaSinSenal.w, antenaSinSenal.h, 1);
+                display.drawFastHLine(0,  52,  128,WHITE);
                 display.display();  
         }
         /////////////////////  OPTICAL SCROLL    /////////////////////
-        void testscrollopticalnetwork(void) {
-            display.setTextSize(2);
-            display.setTextColor(WHITE);
-            display.setCursor(10, 16);
-            display.clearDisplay();
-            display.println("OPTICAL");
-            display.setCursor(3, 28);
-            display.println("networks");
-            display.display();
-            delay(1000);
-            display.startscrollright(0x00, 0x0F);
-            delay(2000);
-            display.stopscroll();
-            delay(1000);
-            display.startscrollleft(0x00, 0x0F);
-            delay(2000);
-            display.stopscroll();
-            delay(1000);
-            display.startscrolldiagright(0x00, 0x07);
-            delay(2000);
-            display.startscrolldiagleft(0x00, 0x07);
-            delay(2000);
-            display.startscrolldiagright(0x00, 0x07);
-            delay(2000);
-            display.startscrolldiagleft(0x00, 0x07);
-            delay(2000);
-            display.startscrolldiagright(0x00, 0x07);
-            delay(2000);
-            display.startscrolldiagleft(0x00, 0x06);
-            delay(2000);
-            display.stopscroll();
+        void testscrollopticalnetwork() {
+         
+
             display.display();
             
+
 
         }
 
           /////////////////////  OBTENER HORA    /////////////////////
 
         String hora() {
-            strHora = "";
-            //get a random server from the pool
-            udp.begin(localPort);
-            WiFi.hostByName(ntpServerName, timeServerIP);
+            //
+                /*strHora = "";
+                //get a random server from the pool
+                udp.begin(localPort);
+                WiFi.hostByName(ntpServerName, timeServerIP);
 
-            sendNTPpacket(timeServerIP); // send an NTP packet to a time server
-            // wait to see if a reply is available
-            delay(1000);
+                sendNTPpacket(timeServerIP); // send an NTP packet to a time server
+                // wait to see if a reply is available
+                delay(1000);
 
-            int cb = udp.parsePacket();
+                int cb = udp.parsePacket();
 
-              if (!cb) {
-                return " ";
-              }
-              else {
-                  // We've received a packet, read the data from it
-                  udp.read(packetBuffer, NTP_PACKET_SIZE); // read the packet into the buffer
-                  //the timestamp starts at byte 40 of the received packet and is four bytes,
-                  // or two words, long. First, esxtract the two words:
-                  unsigned long highWord = word(packetBuffer[40], packetBuffer[41]);
-                  unsigned long lowWord = word(packetBuffer[42], packetBuffer[43]);
-                  // combine the four bytes (two words) into a long integer
-                  // this is NTP time (seconds since Jan 1 1900):
-                  unsigned long secsSince1900 = (highWord + 5) << 16 | lowWord;
-                  // now convert NTP time into everyday time:
-                  // Unix time starts on Jan 1 1970. In seconds, that's 2208988800:
-                  const unsigned long seventyYears = 2208988800UL;
-                  // subtract seventy years:
-                  unsigned long epoch = secsSince1900 - seventyYears;
-                  // print Unix time:
-                  // print the hour, minute and second:
-                  horaActual = ((epoch  % 86400L) / 3600);
-                  minutoActual = ((epoch  % 3600) / 60);
-                  segundoActual = (epoch % 60);
-                }
-                if (horaActual < 10)strHora.concat("0");
-                strHora.concat(horaActual);
-                strHora.concat(":");
-                if (minutoActual < 10)strHora.concat("0");
-                strHora.concat(minutoActual);
-                strHora.concat(":");
-                if (segundoActual < 10)strHora.concat("0");
-                strHora.concat(segundoActual);
-                return strHora;
-              }
+                  if (!cb) {
+                    return " ";
+                  }
+                  else {
+                      // We've received a packet, read the data from it
+                      udp.read(packetBuffer, NTP_PACKET_SIZE); // read the packet into the buffer
+                      //the timestamp starts at byte 40 of the received packet and is four bytes,
+                      // or two words, long. First, esxtract the two words:
+                      unsigned long highWord = word(packetBuffer[40], packetBuffer[41]);
+                      unsigned long lowWord = word(packetBuffer[42], packetBuffer[43]);
+                      // combine the four bytes (two words) into a long integer
+                      // this is NTP time (seconds since Jan 1 1900):
+                      unsigned long secsSince1900 = (highWord + 5) << 16 | lowWord;
+                      // now convert NTP time into everyday time:
+                      // Unix time starts on Jan 1 1970. In seconds, that's 2208988800:
+                      const unsigned long seventyYears = 2208988800UL;
+                      // subtract seventy years:
+                      unsigned long epoch = secsSince1900 - seventyYears;
+                      // print Unix time:
+                      // print the hour, minute and second:
+                      horaActual = ((epoch  % 86400L) / 3600);
+                      minutoActual = ((epoch  % 3600) / 60);
+                      segundoActual = (epoch % 60);
+                    }
+                    if (horaActual < 10)strHora.concat("0");
+                    strHora.concat(horaActual);
+                    strHora.concat(":");
+                    if (minutoActual < 10)strHora.concat("0");
+                    strHora.concat(minutoActual);
+                    strHora.concat(":");
+                    if (segundoActual < 10)strHora.concat("0");
+                    strHora.concat(segundoActual);
+                    return strHora;
+                  }
 
-            // send an NTP request to the time server at the given address
-            unsigned long sendNTPpacket(IPAddress& address) {
-            // set all bytes in the buffer to 0
-            memset(packetBuffer, 0, NTP_PACKET_SIZE);
-            // Initialize values needed to form NTP request
-            // (see URL above for details on the packets)
-            packetBuffer[0] = 0b11100011;   // LI, Version, Mode
-            packetBuffer[1] = 0;     // Stratum, or type of clock
-            packetBuffer[2] = 6;     // Polling Interval
-            packetBuffer[3] = 0xEC;  // Peer Clock Precision
-            // 8 bytes of zero for Root Delay & Root Dispersion
-            packetBuffer[12]  = 49;
-            packetBuffer[13]  = 0x4E;
-            packetBuffer[14]  = 49;
-            packetBuffer[15]  = 52;
+                // send an NTP request to the time server at the given address
+                unsigned long sendNTPpacket(IPAddress& address) {
+                // set all bytes in the buffer to 0
+                memset(packetBuffer, 0, NTP_PACKET_SIZE);
+                // Initialize values needed to form NTP request
+                // (see URL above for details on the packets)
+                packetBuffer[0] = 0b11100011;   // LI, Version, Mode
+                packetBuffer[1] = 0;     // Stratum, or type of clock
+                packetBuffer[2] = 6;     // Polling Interval
+                packetBuffer[3] = 0xEC;  // Peer Clock Precision
+                // 8 bytes of zero for Root Delay & Root Dispersion
+                packetBuffer[12]  = 49;
+                packetBuffer[13]  = 0x4E;
+                packetBuffer[14]  = 49;
+                packetBuffer[15]  = 52;
 
-            // all NTP fields have been given values, now
-            // you can send a packet requesting a timestamp:
-            udp.beginPacket(address, 123); //NTP requests are to port 123
-            udp.write(packetBuffer, NTP_PACKET_SIZE);
-            udp.endPacket();
+                // all NTP fields have been given values, now
+                // you can send a packet requesting a timestamp:
+                udp.beginPacket(address, 123); //NTP requests are to port 123
+                udp.write(packetBuffer, NTP_PACKET_SIZE);
+                udp.endPacket(); */
+            //
+            //sacando hora del servidor
+
+                 if((WiFiMulti.run() == WL_CONNECTED) ) {  
+                HTTPClient http;
+                USE_SERIAL.print("[HTTP] begin...\n");
+                http.begin("http://"+ host_leido+"/hora.php"); //HTTP
+                int httpCode = http.GET();
+
+                if(httpCode > 0) {
+                    if(httpCode == HTTP_CODE_OK) {
+                        response= http.getString();
+                            http.end();
+                          return response;  
+                    } else {
+                        http.end();
+                        return "";
+                    }
+                } 
+                
+            }
         }
             //////// UPTIME ////
 
@@ -473,7 +506,7 @@
                  mins=mins-(hours*60); //subtract the coverted minutes to hours in order to display 59 minutes max
                  hours=hours-(days*24); //subtract the coverted hours to days in order to display 23 hours max
                  
-                display.println(String(days)+"d:"+String(hours)+"h:"+String(mins)+"m:"+String(secs)+"s");
+                display.println("UP:"+String(days)+"d:"+String(hours)+"h:"+String(mins)+"m:"+String(secs)+"s");
                 display.display();
           
         }
@@ -638,17 +671,6 @@
          
         }
         void escanearssids() {
-               /* int n = WiFi.scanNetworks();
-            
-            for (int i = 0; i < n; ++i)
-            {
-              // Print SSID and RSSI for each network found
-
-              String enctype = ((WiFi.encryptionType(i) == ENC_TYPE_NONE) ? "" : "*");
-              a += "{ id: '" + enctype + String(WiFi.SSID(i)) + "', value: '" + String(WiFi.SSID(i)) + "'},";
-              delay(10);
-            }
-            a+="]";*/
 
         }
 
@@ -829,12 +851,14 @@
                 if(httpCode > 0) {
                     if(httpCode == HTTP_CODE_OK) {
                         response= http.getString();
+                        http.end();
                           return response;  
                     } else {
+                        http.end();
                         return false;
                     }
                 } 
-                http.end();
+                
             }
         }   
 
@@ -904,13 +928,13 @@
                 return false;
             }
             server.send(200, "text/html",  "{status:'ok'.statustext:''}");
-                  display.clearDisplay();
+                  /*display.clearDisplay();
                   display.setTextSize(1);
                   display.setCursor(0, 0);
                   display.println("Todo ok");
                   display.setCursor(0, 20);
                   display.display();
-                  delay(2000);
+                  delay(2000);*/
                   display.clearDisplay();
                   for(int i=0; i<150; i++){
              server.handleClient();}
@@ -981,15 +1005,15 @@
             Wire.begin(0, 2); //0 , 2 en esp y nodemcu. En wemos 5,4 
             pinMode(1, INPUT); 
             display.begin();  // initialize with the I2C addr 0x3D (for the 128x64)
+            display.setTextColor(WHITE);
             display.clearDisplay();
-           // WiFi.mode(WIFI_AP_STA);
-            //WiFi.softAP("Optiweather");
             testscrollopticalnetwork();
             display.clearDisplay();
             pinMode(5, OUTPUT);
             pinMode(4, OUTPUT);
             digitalWrite(5, HIGH);
             digitalWrite(4, LOW);
+            
         }
         
         void loop() {
@@ -1068,11 +1092,6 @@
                  }
                 }
                 else{
-                    /*display.clearDisplay();
-                    display.setTextSize(1);
-                    display.setCursor(0,20);
-                    display.println("IdentityKey invalido");
-                    display.display();*/
                     WiFi.mode(WIFI_OFF); 
                     delay(5000);
                     conectar=false;

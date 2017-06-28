@@ -25,12 +25,19 @@ https://electronics.stackexchange.com/
 https://github.com/jasoncoon/esp8266-fastled-webserver
 https://github.com/gmag11/FSBrowser
 http://vidieukhien.xyz/esp8266-spiffs-web-server-html5-websocket-control-dieu-khien-thiet-bi-qua-web-socket/
+https://diyprojects.io/esp8266-web-server-part-1-store-web-interface-spiffs-area-html-css-js/#.WUqYi5A1-Uk -------------Using-ESP8266-SPIFFS
+https://tttapa.github.io/ESP8266/Chap11%20-%20SPIFFS.html
+
 https://diyprojects.io/bootstrap-web-server-esp8266-use-bootswatch-themes/#.WT2GLWiGNPY ------------temas de bootstrap
 https://diyprojects.io/esp8266-web-server-part-2-interaction-code-arduino-html-interface/#.WT2F_GiGNPY ---- usar webpage offline
 https://diyprojects.io/esp8266-web-server-part-1-store-web-interface-spiffs-area-html-css-js/#.WTw9P5A1-Uk
 
 https://www.rinconingenieril.es/arduino-ethernet-y-mysql/ ------------ ARDUINO ->MySQL
 https://www.rinconingenieril.es/de-mysql-a-arduino/	----------------- MySQL -> ARDUINO
-http://bitsofgyan.com/index.php/2016/05/01/http-requests-with-esp8266/ -----------Ejemplo ESPHTTPClient		
+http://bitsofgyan.com/index.php/2016/05/01/http-requests-with-esp8266/ -----------Ejemplo ESPHTTPClient	
+
+http://www.instructables.com/id/Display-Images-on-OLED-Screen-With-Arduino-ATtiny8/ ----> imagen en arduino
+
+https://github.com/squix78/esp8266-weather-station ------------> weather station	
 
 https://www.templatemonster.com/es/admin-templates-tipo-58393.html#tab-questions
