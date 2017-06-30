@@ -183,19 +183,18 @@
             dibujo2 got;
             display.setTextSize(1);
             dibujoRssiMini();
-            dht.begin();
-            delay(3000);
             h = dht.readHumidity();
+            delay(1500);
             t = dht.readTemperature();
-            delay(1000);
+            delay(1500);
             // Reading temperature or humidity takes about 250 milliseconds!
             // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-            if (isnan(t)|| t> 100) {
+            /*if (isnan(t)|| t> 100) {
               t = 0;
             }
             if (isnan(h)|| h> 100) {
               h = 0;
-            }
+            }*/
             display.setTextSize(2);
             display.setCursor(33, 22);
             display.print(t);
@@ -212,7 +211,7 @@
             display.setCursor(0, 55);
             display.print(hora());
             display.drawFastHLine(0,  52,  128,WHITE);
-            display.setCursor(0, 0);
+            display.setCursor(0, 1);
             uptime();
             display.drawBitmap(termo.x, termo.y,  termometro, termo.w, termo.h, WHITE);
             display.drawBitmap(got.x, got.y,  gota, got.w, got.h, WHITE);
@@ -506,7 +505,7 @@
                  mins=mins-(hours*60); //subtract the coverted minutes to hours in order to display 59 minutes max
                  hours=hours-(days*24); //subtract the coverted hours to days in order to display 23 hours max
                  
-                display.println("up: "+String(days)+"d:"+String(hours)+"h:"+String(mins)+"m:"+String(secs)+"s");
+                display.println("UP:"+String(days)+"d:"+String(hours)+"h:"+String(mins)+"m:"+String(secs)+"s");
                 display.display();
           
         }
@@ -1004,6 +1003,7 @@
             SPIFFS.begin();
             Wire.begin(0, 2); //0 , 2 en esp y nodemcu. En wemos 5,4 
             pinMode(1, INPUT); 
+            dht.begin();
             display.begin();  // initialize with the I2C addr 0x3D (for the 128x64)
             display.setTextColor(WHITE);
             display.clearDisplay();
