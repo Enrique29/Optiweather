@@ -4,7 +4,7 @@
 
 /**
  * contructor guestbook view
- * initializes layouts
+ * initializes layocs
  */
 function GuestbookView() {
 	

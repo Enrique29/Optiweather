@@ -10,7 +10,7 @@
 #include <EEPROM.h>
 
 #define DHTTYPE DHT11 
-#define DHTPIN 1//GPIO1-Tx
+#define DHTPIN 1 //GPIO1-Tx
 DHT dht(DHTPIN, DHTTYPE);
 
 #define OLED_RESET LED_BUILTIN
@@ -162,7 +162,7 @@ void testopticalnetwork() {
       display.setCursor(19,28);
       display.println("networks");
       display.display();
-      delay(1000);
+      delay(500);
       display.clearDisplay();
 }
 
@@ -298,18 +298,19 @@ unsigned long sendNTPpacket(IPAddress& address){
 
 
 void setup(){
-  Wire.begin(0,2); //esp8266
+  Wire.begin(0  ,2); //esp8266
   pinMode(1,INPUT);//esp8266
   display.begin();  // initialize with the I2C addr 0x3D (for the 128x64)
   display.display();
   display.clearDisplay();
   dht.begin();
-  testscrollopticalnetwork();
+  //testscrollopticalnetwork();
   display.clearDisplay();
 }
 
 void loop(){
-
+       display.setTextSize(2 );
+      display.setTextColor(WHITE);
         if (WiFi.status() != WL_CONNECTED)WiFi.begin(ssid, pass); 
         strHoraActual = "No WIFI - No Clock";
         if (WiFi.status() == WL_CONNECTED){
@@ -317,8 +318,6 @@ void loop(){
         }  
         
         temperaturaHumedadNoHora();           
-       // barChartTemp();
-       // barChartHum();
         testopticalnetwork();
 }
 

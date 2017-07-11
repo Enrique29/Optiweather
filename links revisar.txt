@@ -7,6 +7,9 @@ http://www.esp8266.com/viewtopic.php?f=29&t=2153
 https://www.youtube.com/watch?v=kYmS-gf88Kk
 https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WiFi/examples
 
+proyectos: https://www.thingiverse.com/search/page:3?q=esp8266&sa=&dwh=445964f8720b409
+
+http://www.forward.com.au/pfod/ESP8266/GPIOpins/ESP8266_01_pin_magic.html
 
 http://davidjwatts.com/youtube/esp8266/esp-convertHTM.html#
 thingspeak.com -------------------------------------------------------------IOT
@@ -41,3 +44,8 @@ http://www.instructables.com/id/Display-Images-on-OLED-Screen-With-Arduino-ATtin
 https://github.com/squix78/esp8266-weather-station ------------> weather station	
 
 https://www.templatemonster.com/es/admin-templates-tipo-58393.html#tab-questions
+
+
+*****Proyectos personales***
+-https://www.thingiverse.com/thing:2046622
+https://www.thingiverse.com/thing:1881827
