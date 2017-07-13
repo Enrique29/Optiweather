@@ -1075,7 +1075,7 @@
             display.setTextSize(1);
             display.setTextColor(WHITE);
             display.clearDisplay();
-            testscrollopticalnetwork();
+            testscrollopticalnetwork();     
             delay(6000);
             display.clearDisplay();
             pinMode(5, OUTPUT);
