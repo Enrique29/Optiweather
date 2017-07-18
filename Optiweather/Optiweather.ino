@@ -41,7 +41,7 @@
 
             ESP8266WiFiMulti WiFiMulti;
       
-
+            const pinSensor=3;
             int e=0; 
             int minuto= 250;//600; //un minuto en ticks
             bool conectar=false;
@@ -95,6 +95,7 @@
             String dns1_leido="";
             String dns2_leido="";
             String host_leido="";
+            String sensor_leido="";
 
             String response = "error";
 
@@ -462,76 +463,6 @@
           /////////////////////  OBTENER HORA    /////////////////////
 
         String hora() {
-            //
-                /*strHora = "";
-                //get a random server from the pool
-                udp.begin(localPort);
-                WiFi.hostByName(ntpServerName, timeServerIP);
-
-                sendNTPpacket(timeServerIP); // send an NTP packet to a time server
-                // wait to see if a reply is available
-                delay(1000);
-
-                int cb = udp.parsePacket();
-
-                  if (!cb) {
-                    return " ";
-                  }
-                  else {
-                      // We've received a packet, read the data from it
-                      udp.read(packetBuffer, NTP_PACKET_SIZE); // read the packet into the buffer
-                      //the timestamp starts at byte 40 of the received packet and is four bytes,
-                      // or two words, long. First, esxtract the two words:
-                      unsigned long highWord = word(packetBuffer[40], packetBuffer[41]);
-                      unsigned long lowWord = word(packetBuffer[42], packetBuffer[43]);
-                      // combine the four bytes (two words) into a long integer
-                      // this is NTP time (seconds since Jan 1 1900):
-                      unsigned long secsSince1900 = (highWord + 5) << 16 | lowWord;
-                      // now convert NTP time into everyday time:
-                      // Unix time starts on Jan 1 1970. In seconds, that's 2208988800:
-                      const unsigned long seventyYears = 2208988800UL;
-                      // subtract seventy years:
-                      unsigned long epoch = secsSince1900 - seventyYears;
-                      // print Unix time:
-                      // print the hour, minute and second:
-                      horaActual = ((epoch  % 86400L) / 3600);
-                      minutoActual = ((epoch  % 3600) / 60);
-                      segundoActual = (epoch % 60);
-                    }
-                    if (horaActual < 10)strHora.concat("0");
-                    strHora.concat(horaActual);
-                    strHora.concat(":");
-                    if (minutoActual < 10)strHora.concat("0");
-                    strHora.concat(minutoActual);
-                    strHora.concat(":");
-                    if (segundoActual < 10)strHora.concat("0");
-                    strHora.concat(segundoActual);
-                    return strHora;
-                  }
-
-                // send an NTP request to the time server at the given address
-                unsigned long sendNTPpacket(IPAddress& address) {
-                // set all bytes in the buffer to 0
-                memset(packetBuffer, 0, NTP_PACKET_SIZE);
-                // Initialize values needed to form NTP request
-                // (see URL above for details on the packets)
-                packetBuffer[0] = 0b11100011;   // LI, Version, Mode
-                packetBuffer[1] = 0;     // Stratum, or type of clock
-                packetBuffer[2] = 6;     // Polling Interval
-                packetBuffer[3] = 0xEC;  // Peer Clock Precision
-                // 8 bytes of zero for Root Delay & Root Dispersion
-                packetBuffer[12]  = 49;
-                packetBuffer[13]  = 0x4E;
-                packetBuffer[14]  = 49;
-                packetBuffer[15]  = 52;
-
-                // all NTP fields have been given values, now
-                // you can send a packet requesting a timestamp:
-                udp.beginPacket(address, 123); //NTP requests are to port 123
-                udp.write(packetBuffer, NTP_PACKET_SIZE);
-                udp.endPacket(); */
-            //
-            //sacando hora del servidor
 
                  if((WiFiMulti.run() == WL_CONNECTED) ) {  
                 HTTPClient http;
@@ -657,6 +588,8 @@
             delay(90);
             String gethost = server.arg("in_urlreport");
             delay(90);
+             String getsensor = server.arg("in_sensor");
+            delay(90);
 
             
             getssid = arregla(getssid);
@@ -665,6 +598,7 @@
             getssidip = arregla(getssidip);
             getgateway=arregla(getgateway);
             getidentitykey = arregla(getidentitykey);
+            getsensor=arregla(getsensor);
 
     
             ///////////verificar lso datos obtenidos ///////////
@@ -729,6 +663,8 @@
             delay(10);
             graba(270,gethost);
             delay(10);
+            graba(300,getsensor);
+            delay(10);
 
             String json ="[ { status: \"1\", value: \"Ok\" } { statusText: \"1\", value: \"\" } ]";
             
@@ -770,6 +706,7 @@
             dns1_leido=lee(210);
             dns2_leido=lee(240);
             host_leido=lee(270);
+            sensor_leido=lee(300);
 
 
         }
@@ -994,13 +931,7 @@
                 return false;
             }
             server.send(200, "text/html",  "{status:'ok'.statustext:''}");
-                  /*display.clearDisplay();
-                  display.setTextSize(1);
-                  display.setCursor(0, 0);
-                  display.println("Todo ok");
-                  display.setCursor(0, 20);
-                  display.display();
-                  delay(2000);*/
+
                   display.clearDisplay();
                   for(int i=0; i<150; i++){
              server.handleClient();}
@@ -1045,6 +976,44 @@
         display.display();
         }
 
+
+      void tratarSensores(){
+            if (String(sensor_leido)="Sensor de fuego"){
+
+                    int fuego =digitalread(sensorPin);
+                    if (fuego == HIGH)
+                       {
+                         /****/
+                       }
+                       
+
+            }
+            if (String(sensor_leido)="Sensor de aniego"){
+                  int agua =digitalread(sensorPin);
+                    if (agua == HIGH)
+                       {
+                         /****/
+                       }
+
+            }
+            
+            if (String(sensor_leido)="Sensor de presencia"){
+                
+            }
+            
+            if (String(sensor_leido)="Sensor de consumo electrico"){
+
+            }
+            
+            if (String(sensor_leido)="Sensor de paso por umbral"){
+
+            }
+            
+
+
+        }
+  
+
         void setupWifiServer() {
             WiFi.mode(WIFI_OFF); 
             delay(500);
@@ -1075,7 +1044,7 @@
             display.setTextSize(1);
             display.setTextColor(WHITE);
             display.clearDisplay();
-            testscrollopticalnetwork();
+            testscrollopticalnetwork();     
             delay(6000);
             display.clearDisplay();
             pinMode(5, OUTPUT);
@@ -1143,24 +1112,7 @@
                 pantallaConexion();//pantalla de datos de conexión a internet
                 delay(4000);
                 testscrollopticalnetwork();
-                //pantalla de Optiweather V1.0
-                //si se desconecta de pronto voverá al inicio
-                /*
-                 while (WiFi.status() != WL_CONNECTED) {
 
-                    display.clearDisplay();
-                    display.vsetTextSize(1);
-                    display.setCursor(0,30);
-                    display.println("Se ha perdido la conexión");  
-                    display.setCursor(0,40);
-                    display.println("esperando...");
-                    perdioconex++;
-                    if(perdioconex >= 600){
-                        conectar=false;
-                        e=0;
-                    }
-
-                 }*/
                 }
                 else{
                     WiFi.mode(WIFI_OFF); 
